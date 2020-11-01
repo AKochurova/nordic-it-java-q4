@@ -1,28 +1,29 @@
 package sql.demo;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
+import java.util.Scanner;
 
 public class Palindrome {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str1 = br.readLine();
+    public static void main(String[] args) {
+        Scanner br = new Scanner(System.in);
+        System.out.println("Введите строку");
+        String str1 = br.nextLine();
 
-        System.out.println(fun(str1));
-
+        if (str1 == null || str1.isEmpty()) {
+            System.out.println("Введите строку правильно");
+        } else System.out.println(fun(str1));
 
     }
 
     public static boolean fun(String s) {
 
-
         if (s.charAt(0) != s.charAt(s.length() - 1)) {
             return false;
         }
-        fun(s.substring(1, s.length() - 2));
-
-        return true;
-
+        if (s.length() > 3) {
+            fun(s.substring(1, s.length() - 2));
+            return true;
+        } else return true;
 
     }
 }
