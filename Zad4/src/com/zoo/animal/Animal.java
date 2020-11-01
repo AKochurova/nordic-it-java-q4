@@ -2,9 +2,11 @@ package com.zoo.animal;
 
 public class Animal {
     protected String name = "Animal";
+    protected int age;
+    protected String color;
 
-    protected void Say() {
-        System.out.println("say");
+    protected void say() {
+        System.out.println("Animal say");
     }
 
     //два общих метода
@@ -16,32 +18,17 @@ public class Animal {
         System.out.println("eat");
     }
 
-    //два метода, которые отличаются у всех животных
-    protected void move() {
-        System.out.println("moving");
-    }
-
-    protected void giveFood() {
-        System.out.println("food");
-    }
 
     public Animal() {
-        System.out.println(name);
-        Say();
-        walk();
-        eat();
-        move();
-        giveFood();
+
     }
 
-    public Animal(String name) {
+    public Animal(String name, int age, String color) {
         this.name = name;
-        System.out.println(name);
-        Say();
-        walk();
-        eat();
-        move();
-        giveFood();
+        this.age = age;
+        this.color = color;
+
+
     }
 
     public String getName() {
@@ -50,5 +37,21 @@ public class Animal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

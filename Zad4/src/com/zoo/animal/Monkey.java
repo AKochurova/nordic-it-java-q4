@@ -1,22 +1,23 @@
 package com.zoo.animal;
 
 public class Monkey extends Animal {
-    protected void Say() {
+    protected void say() {
         System.out.println("Monkey say");
     }
 
-    protected void move() {
+    protected void jump() {
         System.out.println("jumping");
     }
 
-    protected void giveFood() {
-        System.out.println("banana");
+    protected void hang() {
+        System.out.println("hanging");
     }
 
     public Monkey(){
         super();
     }
-    public Monkey(String name) {
-        super(name);
+    public Monkey(String name, int age, String color) {
+
+        super(name, age, color);
     }
 }

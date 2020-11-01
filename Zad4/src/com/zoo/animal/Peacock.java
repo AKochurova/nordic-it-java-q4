@@ -1,23 +1,24 @@
 package com.zoo.animal;
 
 public class Peacock extends Animal {
-    protected void Say() {
+    protected void say() {
         System.out.println("Peacock say");
     }
 
-    protected void move() {
+    protected void fly() {
         System.out.println("flying");
     }
 
-    protected void giveFood() {
-        System.out.println("grains");
+    protected void sing() {
+        System.out.println("singing");
     }
 
     public Peacock(){
         super();
     }
-    public Peacock(String name) {
-        super(name);
+    public Peacock(String name, int age, String color) {
+
+        super(name, age, color);
     }
 }
 

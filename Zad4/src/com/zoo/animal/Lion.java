@@ -1,22 +1,22 @@
 package com.zoo.animal;
 
 public class Lion extends Animal {
-    protected void Say() {
+    protected void say() {
         System.out.println("Lion say");
     }
 
-    protected void move() {
-        System.out.println("crawling");
+    protected void roar() {
+        System.out.println("roaring");
     }
 
-    protected void giveFood() {
-        System.out.println("meat");
+    protected void hunt() {
+        System.out.println("hunting");
     }
 
     public Lion(){
         super();
     }
-    public Lion(String name) {
-        super(name);
+    public Lion(String name, int age, String color) {
+        super(name, age, color);
     }
 }
