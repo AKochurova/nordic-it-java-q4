@@ -3,6 +3,8 @@ package com.zoo;
 import com.zoo.animal.*;
 
 
+
+
 public class Main {
 
     public static void main(String[] args) {
@@ -10,13 +12,12 @@ public class Main {
     Animal mn = new Monkey("Monkey", 7, "brown");
     Animal pk = new Peacock("dfd", 6,"fdgdf");
     Animal pk2 = new Peacock("dfd", 6,"fdgdf");
-    Cage cage = new Cage();
-    cage.addAnimal(mn);
-    cage.addAnimal(mn);
-    cage.addAnimal(ln);
-    cage.addAnimal(pk);
-    cage.addAnimal(pk2);
-    System.out.println(cage.hs);
+    Cages cg = new Cages();
+    cg.createCages();
+    cg.addAnimal(1,mn);
+    cg.addAnimal(1,pk);
+    cg.addAnimal(1,pk);
+
 
     }
 }

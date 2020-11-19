@@ -6,7 +6,8 @@ import com.zoo.exception.IdenticAnimalException;
 import java.util.HashSet;
 
 public class Cage {
-    HashSet<Object> hs = new HashSet<>(1);
+    HashSet<Object> hs = new HashSet<>();
+
     public void addAnimal(Object animal){
         try {
             if (!hs.add(animal))
