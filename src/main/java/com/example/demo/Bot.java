@@ -76,6 +76,7 @@ public class Bot extends TelegramWebhookBot {
                 case "/изменить город":
                     sendMsg(message, "Введите город");
                     town=message.getText();
+                    break;
                 default:
                     try {
 
