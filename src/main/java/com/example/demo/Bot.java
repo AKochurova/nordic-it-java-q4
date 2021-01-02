@@ -22,7 +22,7 @@ import java.util.Scanner;
 
 @Component
 public class Bot extends TelegramWebhookBot {
-    
+
     private static final Logger log = Logger.getLogger(JSeekerBotApplication.class);
 
     public void sendMsg(Message message, String text){
@@ -49,7 +49,8 @@ public class Bot extends TelegramWebhookBot {
 
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("/help"));
+        keyboardFirstRow.add(new KeyboardButton("/помощь"));
+        keyboardFirstRow.add(new KeyboardButton("/изменить город"));
 
         keyboardRowList.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
