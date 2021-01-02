@@ -1,4 +1,5 @@
 package com.example.demo;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -21,6 +22,8 @@ import java.util.Scanner;
 
 @Component
 public class Bot extends TelegramWebhookBot {
+    
+    private static final Logger log = Logger.getLogger(JSeekerBotApplication.class);
 
     public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
@@ -56,7 +59,8 @@ public class Bot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         Message message = update.getMessage();
-        Model model = new Model();
+        String town = "Кемерово";
+
         ArrayList<Model> arr = new ArrayList<>();
         for(int i=0; i<5; i++){
             Model m = new Model();
@@ -68,16 +72,20 @@ public class Bot extends TelegramWebhookBot {
                 case "/помощь":
                     sendMsg(message, "Введите название нужной вам специализации");
                     break;
+                case "/изменить город":
+                    sendMsg(message, "Введите город");
+                    town=message.getText();
                 default:
                     try {
 
                         for (int i=0; i<arr.size(); i++) {
-                            sendMsg(message, Jobs.getJobs(message.getText(), arr, i));
+                            sendMsg(message, Jobs.getJobs(message.getText(), arr, i, town));
                         }
                     }catch (Exception e){
                         sendMsg(message, " Not found");
                     }
             }
+            log.debug("new update recieved");
 
         }
         return null;
