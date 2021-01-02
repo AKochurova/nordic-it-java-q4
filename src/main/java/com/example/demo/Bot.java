@@ -1,7 +1,8 @@
 package com.example.demo;
 import org.springframework.stereotype.Component;
 
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class Bot extends TelegramLongPollingBot {
+public class Bot extends TelegramWebhookBot {
 
     public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
@@ -32,7 +33,26 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-    public void onUpdateReceived(Update update) {
+
+    public void setButton(SendMessage sendMessage){
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add(new KeyboardButton("/settings"));
+        keyboardFirstRow.add(new KeyboardButton("/help"));
+
+        keyboardRowList.add(keyboardFirstRow);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+    }
+
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         Message message = update.getMessage();
         Model model = new Model();
         ArrayList<Model> arr = new ArrayList<>();
@@ -67,24 +87,8 @@ public class Bot extends TelegramLongPollingBot {
             }
 
         }
-
+        return null;
     }
-    public void setButton(SendMessage sendMessage){
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("/settings"));
-        keyboardFirstRow.add(new KeyboardButton("/help"));
-
-        keyboardRowList.add(keyboardFirstRow);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
-    }
-
 
     public String getBotUsername() {
         return "MyTestBot";
@@ -92,6 +96,11 @@ public class Bot extends TelegramLongPollingBot {
 
     public String getBotToken() {
         return "1494861198:AAH8K7yIpRcohFyiLB_Ale_UAi_9U3l7RBE";
+    }
+
+    @Override
+    public String getBotPath() {
+        return "https://jobseeker-bot.herokuapp.com/";
     }
 
 
