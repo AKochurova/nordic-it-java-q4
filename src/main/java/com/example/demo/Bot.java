@@ -23,7 +23,15 @@ import java.util.Scanner;
 @Component
 public class Bot extends TelegramWebhookBot {
 
-    private static final Logger log = Logger.getLogger(JSeekerBotApplication.class);
+    String town = "Кемерово";
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
 
     public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
@@ -60,7 +68,7 @@ public class Bot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         Message message = update.getMessage();
-        String town = "Кемерово";
+
 
         ArrayList<Model> arr = new ArrayList<>();
         for(int i=0; i<5; i++){
@@ -75,7 +83,7 @@ public class Bot extends TelegramWebhookBot {
                     break;
                 case "/изменить город":
                     sendMsg(message, "Введите город");
-                    town=message.getText();
+                    setTown(message.getText());
                     break;
                 default:
                     try {
@@ -87,7 +95,7 @@ public class Bot extends TelegramWebhookBot {
                         sendMsg(message, " Not found");
                     }
             }
-            log.debug("new update recieved");
+
 
         }
         return null;
