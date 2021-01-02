@@ -13,8 +13,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Component
 public class Bot extends TelegramWebhookBot {
@@ -43,7 +46,6 @@ public class Bot extends TelegramWebhookBot {
 
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("/settings"));
         keyboardFirstRow.add(new KeyboardButton("/help"));
 
         keyboardRowList.add(keyboardFirstRow);
@@ -64,24 +66,24 @@ public class Bot extends TelegramWebhookBot {
         if (message != null && message.hasText()){
             switch (message.getText()){
                 case "/помощь":
-                    sendMsg(message, "Чем могу помочь?");
-                    break;
-                case "/settings":
-                    sendMsg(message, "What need to be set?");
+                    sendMsg(message, "Введите название нужной вам специализации");
                     break;
                 default:
                     try {
+                        String str="https://api.superjob.ru/2.0/v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f/vacancies/?keyword="+message;
+                        URL url = new URL(str);
 
-                        //String res = Jobs.getJobs(message.getText(), model);
-                        //if (!res.isEmpty())
+
+                        Scanner scanner = new Scanner((InputStream)url.getContent());
+                        String result = "";
+
+
+                        result += scanner.nextLine();
+
                         for (int i=0; i<arr.size(); i++) {
-                            sendMsg(message, Jobs.getJobs(message.getText(), /*model*/ arr, i));
+                            sendMsg(message, Jobs.getJobs(message.getText(), arr, i, result));
                         }
-                        //else sendMsg(message, " Not found");
-
-
-
-                    }catch (IOException e){
+                    }catch (Exception e){
                         sendMsg(message, " Not found");
                     }
             }
