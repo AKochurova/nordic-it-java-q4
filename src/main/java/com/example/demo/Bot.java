@@ -81,11 +81,11 @@ public class Bot extends TelegramWebhookBot {
                 case "/помощь":
                     sendMsg(message, "Введите название нужной вам специализации");
                     break;
-                /*case "/изменить город":
+                case "/изменить город":
                     Scanner scanner = new Scanner(System.in);
                     setTown(scanner.nextLine());
                     sendMsg(message, "Город "+town);
-                    break;*/
+                    break;
                 default:
                     try {
 
