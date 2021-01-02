@@ -70,18 +70,9 @@ public class Bot extends TelegramWebhookBot {
                     break;
                 default:
                     try {
-                        String str="https://api.superjob.ru/2.0/v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f/vacancies/?keyword="+message;
-                        URL url = new URL(str);
-
-
-                        Scanner scanner = new Scanner((InputStream)url.getContent());
-                        String result = "";
-
-
-                        result += scanner.nextLine();
 
                         for (int i=0; i<arr.size(); i++) {
-                            sendMsg(message, Jobs.getJobs(message.getText(), arr, i, result));
+                            sendMsg(message, Jobs.getJobs(message.getText(), arr, i));
                         }
                     }catch (Exception e){
                         sendMsg(message, " Not found");

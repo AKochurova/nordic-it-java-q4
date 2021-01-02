@@ -9,8 +9,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Jobs {
-    public static String getJobs(String message, ArrayList<Model> arr, int num, String result) throws IOException {
+    public static String getJobs(String message, ArrayList<Model> arr, int num) throws IOException {
 
+        String str="https://api.superjob.ru/2.0/v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f/vacancies/?keyword="+message;
+        URL url = new URL(str);
+
+
+        Scanner scanner = new Scanner((InputStream)url.getContent());
+        String result = "";
+
+
+        result += scanner.nextLine();
 
         JSONObject object = new JSONObject(result);
 
