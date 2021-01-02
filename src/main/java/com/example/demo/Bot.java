@@ -84,6 +84,7 @@ public class Bot extends TelegramWebhookBot {
                 case "/изменить город":
                     Scanner scanner = new Scanner(System.in);
                     setTown(scanner.nextLine());
+                    sendMsg(message, "Город "+town);
                     break;
                 default:
                     try {
