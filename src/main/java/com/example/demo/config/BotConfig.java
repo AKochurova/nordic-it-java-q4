@@ -18,7 +18,7 @@ public class BotConfig {
     private String botUsername;
 
     @Bean
-    public Bot bot(TelegramFacade telegramFacade){
+    public Bot myJSeekerBot(TelegramFacade telegramFacade){
         Bot bot  = new Bot(telegramFacade);
         bot.setBotPath(botPath);
         bot.setBotToken(botToken);
