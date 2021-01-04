@@ -23,17 +23,26 @@ import java.util.Scanner;
 @Component
 public class Bot extends TelegramWebhookBot {
 
-    String town = "Кемерово";
+    private String botPath;
+    private String botToken;
+    private String botUsername;
+   // private String town = "Кемерово";
 
-    public String getTown() {
+    private TelegramFacade telegramFacade;
+
+    public Bot(TelegramFacade telegramFacade){
+        this.telegramFacade=telegramFacade;
+    }
+
+    /*public String getTown() {
         return town;
     }
 
     public void setTown(String town) {
         this.town = town;
-    }
+    }*/
 
-    public void sendMsg(Message message, String text){
+    /*public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
@@ -58,16 +67,16 @@ public class Bot extends TelegramWebhookBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         keyboardFirstRow.add(new KeyboardButton("/помощь"));
-        keyboardFirstRow.add(new KeyboardButton("/изменить город"));
+        //keyboardFirstRow.add(new KeyboardButton("/изменить город"));
 
         keyboardRowList.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
-    }
+    }*/
 
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Message message = update.getMessage();
+        /*Message message = update.getMessage();
 
 
         ArrayList<Model> arr = new ArrayList<>();
@@ -79,13 +88,11 @@ public class Bot extends TelegramWebhookBot {
         if (message != null && message.hasText()){
             switch (message.getText()){
                 case "/помощь":
-                    sendMsg(message, "Введите название нужной вам специализации");
+                    sendMsg(message, "Введите нужную вам специализацию");
                     break;
-                case "/изменить город":
-                    Scanner scanner = new Scanner(System.in);
-                    setTown(scanner.nextLine());
-                    sendMsg(message, "Город "+town);
-                    break;
+             */ /*  case "/изменить город":
+
+                    break;*//*
                 default:
                     try {
 
@@ -99,21 +106,36 @@ public class Bot extends TelegramWebhookBot {
 
 
         }
-        return null;
+        return null;*/
+        SendMessage replyMessageToUser = telegramFacade.handleUpdate(update);
+
+        return replyMessageToUser;
     }
 
+    @Override
     public String getBotUsername() {
-        return "MyTestBot";
+        return botUsername;
     }
 
+    @Override
     public String getBotToken() {
-        return "1494861198:AAH8K7yIpRcohFyiLB_Ale_UAi_9U3l7RBE";
+        return botToken;
     }
 
     @Override
     public String getBotPath() {
-        return "https://jobseeker-bot.herokuapp.com/";
+        return botPath;
     }
 
+    public void setBotPath(String botPath) {
+        this.botPath = botPath;
+    }
 
+    public void setBotToken(String botToken) {
+        this.botToken = botToken;
+    }
+
+    public void setBotUsername(String botUsername) {
+        this.botUsername = botUsername;
+    }
 }
