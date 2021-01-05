@@ -1,4 +1,4 @@
-package com.example.demo.config;
+/*package com.example.demo.config;
 
 import com.example.demo.Bot;
 import com.example.demo.TelegramFacade;
@@ -26,3 +26,4 @@ public class BotConfig {
         return bot;
     }
 }
+*/

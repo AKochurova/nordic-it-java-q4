@@ -3,27 +3,30 @@ package com.example.demo.handlers;
 import com.example.demo.BotState;
 import com.example.demo.Jobs;
 import com.example.demo.Model;
-import com.example.demo.ReplyMessageService;
+import com.example.demo.service.ReplyMessageService;
 import com.example.demo.cache.UserDataCache;
-import com.example.demo.cache.UserProfileData;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 
+@Slf4j
 @Component
 public class FillingProfileHandle implements InputMessageHandler{
     private UserDataCache userDataCache;
     private ReplyMessageService messageService;
 
-    public FillingProfileHandle(UserDataCache userDataCache){
+    public FillingProfileHandle(UserDataCache userDataCache, ReplyMessageService messageService){
         this.userDataCache = userDataCache;
+        this.messageService = messageService;
+
     }
 
 
     @Override
-    public SendMessage handle(org.telegram.telegrambots.meta.api.objects.Message message) {
+    public SendMessage handle(Message message) {
         if(userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.FILLING_PROFILE)){
             userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.CHOOSE_CITY);
         }
@@ -55,7 +58,7 @@ public class FillingProfileHandle implements InputMessageHandler{
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if (botState.equals(BotState.PROFILE_FILLED)){
-            profileData.setJob(usersAnswer.getText());
+            
             ArrayList<Model> arr = new ArrayList<>();
             for(int i=0; i<5; i++){
                 Model m = new Model();
@@ -69,6 +72,7 @@ public class FillingProfileHandle implements InputMessageHandler{
             }catch (Exception e){
                 messageService.sendMsg(usersAnswer, " Not found");
             }
+            profileData.setJob(usersAnswer.getText());
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
             replyToUser = new SendMessage(chatId, String.format("%s %s", "Data: ", profileData));
 

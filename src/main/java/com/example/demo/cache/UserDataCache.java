@@ -1,6 +1,7 @@
 package com.example.demo.cache;
 
 import com.example.demo.BotState;
+import com.example.demo.handlers.UserProfileData;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
