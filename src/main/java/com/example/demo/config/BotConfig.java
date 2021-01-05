@@ -1,4 +1,4 @@
-/*package com.example.demo.config;
+package com.example.demo.config;
 
 import com.example.demo.Bot;
 import com.example.demo.TelegramFacade;
@@ -7,9 +7,11 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.ApiContext;
 
-@Getter
 @Setter
+@Getter
 @Configuration
 @ConfigurationProperties(prefix = "telegrambot")
 public class BotConfig {
@@ -19,11 +21,12 @@ public class BotConfig {
 
     @Bean
     public Bot myJSeekerBot(TelegramFacade telegramFacade){
-        Bot bot  = new Bot(telegramFacade);
+        DefaultBotOptions options = ApiContext.getInstance(DefaultBotOptions.class);
+        Bot bot = new Bot(options, telegramFacade);
+        bot.setBotUsername(botUsername);
         bot.setBotPath(botPath);
         bot.setBotToken(botToken);
-        bot.setBotUsername(botUsername);
         return bot;
+
     }
 }
-*/

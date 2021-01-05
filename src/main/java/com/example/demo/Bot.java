@@ -1,8 +1,9 @@
 package com.example.demo;
 //import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+
 
 //import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 */
-@Component
+
 public class Bot extends TelegramWebhookBot {
 
     private String botPath;
@@ -31,10 +32,8 @@ public class Bot extends TelegramWebhookBot {
 
     private TelegramFacade telegramFacade;
 
-    public Bot(TelegramFacade telegramFacade){
-        setBotPath("https://jobseeker-bot.herokuapp.com/");
-        setBotToken("1494861198:AAH8K7yIpRcohFyiLB_Ale_UAi_9U3l7RBE");
-        setBotUsername("MyTestBot");
+    public Bot(DefaultBotOptions botOptions, TelegramFacade telegramFacade){
+        super(botOptions);
         this.telegramFacade=telegramFacade;
 
     }
