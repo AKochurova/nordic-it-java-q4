@@ -5,14 +5,13 @@ import com.example.demo.Jobs;
 import com.example.demo.Model;
 import com.example.demo.service.ReplyMessageService;
 import com.example.demo.cache.UserDataCache;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 
-@Slf4j
 @Component
 public class FillingProfileHandle implements InputMessageHandler{
     private UserDataCache userDataCache;
@@ -58,7 +57,7 @@ public class FillingProfileHandle implements InputMessageHandler{
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if (botState.equals(BotState.PROFILE_FILLED)){
-            
+
             ArrayList<Model> arr = new ArrayList<>();
             for(int i=0; i<5; i++){
                 Model m = new Model();

@@ -1,14 +1,14 @@
 package com.example.demo;
 
 import com.example.demo.cache.UserDataCache;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
+
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-@Slf4j
 public class TelegramFacade {
     private BotStateContext botStateContext;
     private UserDataCache userDataCache;
@@ -23,8 +23,8 @@ public class TelegramFacade {
 
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
-            log.info("New message from User:{}, chatId: {}, with text: {}",
-                    message.getFrom().getUserName(), message.getChatId(), message.getText());
+            /*log.info("New message from User:{}, chatId: {}, with text: {}",
+                    message.getFrom().getUserName(), message.getChatId(), message.getText());*/
             replyMessage = handleInputMessage(message);
         }
         return replyMessage;
