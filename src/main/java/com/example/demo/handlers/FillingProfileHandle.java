@@ -66,14 +66,14 @@ public class FillingProfileHandle implements InputMessageHandler{
             try {
 
                 for (int i=0; i<arr.size(); i++) {
-                    messageService.sendMsg(usersAnswer, Jobs.getJobs(usersAnswer.getText(), arr, i, profileData.getTown()));
+                   replyToUser = messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), arr, i, profileData.getTown()));
                 }
             }catch (Exception e){
-                messageService.sendMsg(usersAnswer, " Not found");
+                replyToUser = messageService.getReplyMessage(userId, " Not found");
             }
             profileData.setJob(usersAnswer.getText());
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
-            replyToUser = new SendMessage(chatId, String.format("%s %s", "Data: ", profileData));
+
 
         }
         userDataCache.saveUserProfileData(userId, profileData);
