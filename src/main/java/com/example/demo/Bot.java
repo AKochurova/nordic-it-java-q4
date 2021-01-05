@@ -142,7 +142,7 @@ public class Bot extends TelegramWebhookBot {
             //log.info("New message from User:{}, chatId: {}, with text: {}",
             //message.getFrom().getUserName(), message.getChatId(), message.getText());
             replyMessage = handleInputMessage(message);
-            sendMsg(replyMessage);
+            
         }
         return replyMessage;
     }
