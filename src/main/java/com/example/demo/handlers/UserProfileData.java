@@ -1,4 +1,4 @@
-package com.example.demo.handlers;
+/*package com.example.demo.handlers;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,4 +8,4 @@ import lombok.Setter;
 public class UserProfileData {
     private String town;
     private String job;
-}
+}*/

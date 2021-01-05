@@ -1,4 +1,4 @@
-package com.example.demo.handlers;
+/*package com.example.demo.handlers;
 
 import com.example.demo.BotState;
 import com.example.demo.Jobs;
@@ -51,12 +51,12 @@ public class FillingProfileHandle implements InputMessageHandler{
             replyToUser = messageService.getReplyMessage(chatId, "choose city");
             userDataCache.setUsersCurrentBotState(userId, BotState.FIND_JOB);
         }
-        else if (botState.equals(BotState.FIND_JOB)){
+        if (botState.equals(BotState.FIND_JOB)){
             profileData.setTown(usersAnswer.getText());
             replyToUser = messageService.getReplyMessage(chatId, "choose job");
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
-        else if (botState.equals(BotState.PROFILE_FILLED)){
+         if (botState.equals(BotState.PROFILE_FILLED)){
 
             ArrayList<Model> arr = new ArrayList<>();
             for(int i=0; i<5; i++){
@@ -82,3 +82,4 @@ public class FillingProfileHandle implements InputMessageHandler{
     }
 
 }
+*/
