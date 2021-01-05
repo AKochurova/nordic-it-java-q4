@@ -66,7 +66,7 @@ public class FillingProfileHandle implements InputMessageHandler{
             try {
 
                 for (int i=0; i<arr.size(); i++) {
-                   replyToUser = messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), arr, i, profileData.getTown()));
+                   replyToUser = messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(),  profileData.getTown()));
                 }
             }catch (Exception e){
                 replyToUser = messageService.getReplyMessage(userId, " Not found"+usersAnswer.getText());
