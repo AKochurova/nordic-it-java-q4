@@ -1,4 +1,4 @@
-/*package com.example.demo;
+package com.example.demo;
 
 public enum BotState {
     SEND_HELP,
@@ -7,4 +7,4 @@ public enum BotState {
     FILLING_PROFILE,
     PROFILE_FILLED;
 
-}*/
+}

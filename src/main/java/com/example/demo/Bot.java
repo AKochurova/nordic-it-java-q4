@@ -1,5 +1,13 @@
 package com.example.demo;
+import com.example.demo.cache.UserDataCache;
+import org.apache.log4j.Logger;
 
+
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import com.example.demo.handlers.FillingProfileHandle;
+import com.example.demo.handlers.InputMessageHandler;
+import com.example.demo.service.ReplyMessageService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -12,10 +20,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Scanner;
 
 @Component
 public class Bot extends TelegramWebhookBot {
@@ -25,9 +35,18 @@ public class Bot extends TelegramWebhookBot {
     private String botUsername;
 
 
+
+    private UserDataCache userDataCache = new UserDataCache();
+    private ReplyMessageService messageService = new ReplyMessageService();
     private String town = "Кемерово";
 
+    /*private TelegramFacade telegramFacade;
 
+    public Bot(DefaultBotOptions botOptions, TelegramFacade telegramFacade){
+        super(botOptions);
+        this.telegramFacade=telegramFacade;
+
+    }*/
 
     public String getTown() {
         return town;
@@ -37,7 +56,7 @@ public class Bot extends TelegramWebhookBot {
         this.town = town;
     }
 
-    public void sendMsg(Message message, String text){
+   /* public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
@@ -61,19 +80,28 @@ public class Bot extends TelegramWebhookBot {
 
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("/найти работу"));
-        keyboardFirstRow.add(new KeyboardButton("/изменить город"));
+        keyboardFirstRow.add(new KeyboardButton("/помощь"));
+        //keyboardFirstRow.add(new KeyboardButton("/изменить город"));
 
         keyboardRowList.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
-    }
+    }*/
+   public void sendMsg(SendMessage sendMessage){
 
+       try{
+
+           execute(sendMessage);
+
+       }catch (TelegramApiException e){
+           e.printStackTrace();
+       }
+   }
 
 
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        Message message = update.getMessage();
+       /* Message message = update.getMessage();
 
 
         ArrayList<Model> arr = new ArrayList<>();
@@ -84,30 +112,12 @@ public class Bot extends TelegramWebhookBot {
 
         if (message != null && message.hasText()) {
 
-            /*if(message.getText().equals("/найти работу")){
-                sendMsg(message, "Введите город");
-            }
-            else setTown(message.getText());
-            if (town != null){
-                try {
-
-                    for (int i = 0; i < arr.size(); i++) {
-                        sendMsg(message, Jobs.getJobs(message.getText(), arr, i, town));
-                    }
-                } catch (Exception e) {
-                    sendMsg(message, " Not found");
-                }
-            }*/
             switch (message.getText()) {
 
                 case "/найти работу":
                     sendMsg(message, "Введите город");
+
                     break;
-
-                /*case "/выбрать город":
-                    setTown(message.getText());
-                    break;*/
-
                 default:
 
                     try {
@@ -124,7 +134,53 @@ public class Bot extends TelegramWebhookBot {
         }
         return null;
 
+    }*/
+        SendMessage replyMessage = null;
+
+        Message message = update.getMessage();
+        if (message != null && message.hasText()) {
+            //log.info("New message from User:{}, chatId: {}, with text: {}",
+            //message.getFrom().getUserName(), message.getChatId(), message.getText());
+            replyMessage = handleInputMessage(message);
+            sendMsg(replyMessage);
+        }
+        return replyMessage;
     }
+
+
+        /*SendMessage replyMessageToUser = telegramFacade.handleUpdate(update);
+
+        return replyMessageToUser;*/
+
+
+
+    public SendMessage handleInputMessage(Message message){
+            String inputMsg = message.getText();
+            int userId = message.getFrom().getId();
+
+            BotState botState;
+
+            SendMessage replyMessage;
+
+            switch (inputMsg) {
+                case "/help":
+                    botState = BotState.SEND_HELP;
+                    break;
+                case "/start":
+                    botState = BotState.FILLING_PROFILE;
+                    break;
+                default:
+                    botState = userDataCache.getUsersCurrentBotState(userId);
+                    break;
+            }
+
+            userDataCache.setUsersCurrentBotState(userId, botState);
+            InputMessageHandler currentMessageHandler = new FillingProfileHandle(userDataCache, messageService);
+            replyMessage = currentMessageHandler.handle(message);
+
+            return replyMessage;
+        }
+
 
 
 

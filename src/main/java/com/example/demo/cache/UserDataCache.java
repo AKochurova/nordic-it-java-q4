@@ -1,4 +1,4 @@
-/*package com.example.demo.cache;
+package com.example.demo.cache;
 
 import com.example.demo.BotState;
 import com.example.demo.handlers.UserProfileData;
@@ -36,4 +36,4 @@ public class UserDataCache {
 
         usersProfileData.put(userId, userProfileData);
     }
-}*/
+}

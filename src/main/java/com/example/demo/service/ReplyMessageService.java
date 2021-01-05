@@ -1,4 +1,4 @@
-/*package com.example.demo.service;
+package com.example.demo.service;
 
 
 
@@ -11,7 +11,7 @@ public class ReplyMessageService {
     public SendMessage getReplyMessage(long chatId, String replyMessage){
         return new SendMessage(chatId, replyMessage);
     }
-    public void sendMsg(Message message, String text){
+    /*public void sendMsg(Message message, String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
@@ -19,5 +19,5 @@ public class ReplyMessageService {
         sendMessage.setText(text);
 
 
-    }
-}*/
+    }*/
+}

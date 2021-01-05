@@ -1,4 +1,4 @@
-/*package com.example.demo.handlers;
+package com.example.demo.handlers;
 
 import com.example.demo.BotState;
 import com.example.demo.Jobs;
@@ -82,4 +82,3 @@ public class FillingProfileHandle implements InputMessageHandler{
     }
 
 }
-*/
