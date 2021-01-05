@@ -25,7 +25,7 @@ public class Bot extends TelegramWebhookBot {
     private String botUsername;
 
 
-    private String town;
+    private String town = "Кемерово";
 
 
 
@@ -62,7 +62,7 @@ public class Bot extends TelegramWebhookBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         keyboardFirstRow.add(new KeyboardButton("/найти работу"));
-        //keyboardFirstRow.add(new KeyboardButton("/изменить город"));
+        keyboardFirstRow.add(new KeyboardButton("/изменить город"));
 
         keyboardRowList.add(keyboardFirstRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
@@ -84,7 +84,7 @@ public class Bot extends TelegramWebhookBot {
 
         if (message != null && message.hasText()) {
 
-            if(message.getText().equals("/найти работу")){
+            /*if(message.getText().equals("/найти работу")){
                 sendMsg(message, "Введите город");
             }
             else setTown(message.getText());
@@ -97,15 +97,16 @@ public class Bot extends TelegramWebhookBot {
                 } catch (Exception e) {
                     sendMsg(message, " Not found");
                 }
-            }
-            /*switch (message.getText()) {
+            }*/
+            switch (message.getText()) {
 
                 case "/найти работу":
                     sendMsg(message, "Введите город");
                     break;
 
-                case "выбрать город":
+                /*case "/выбрать город":
                     setTown(message.getText());
+                    break;*/
 
                 default:
 
@@ -117,7 +118,7 @@ public class Bot extends TelegramWebhookBot {
                     } catch (Exception e) {
                         sendMsg(message, " Not found");
                     }
-            }*/
+            }
 
 
         }
