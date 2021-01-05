@@ -53,7 +53,7 @@ public class FillingProfileHandle implements InputMessageHandler{
         }
         if (botState.equals(BotState.FIND_JOB)){
             profileData.setTown(usersAnswer.getText());
-            replyToUser = messageService.getReplyMessage(chatId, "choose job");
+            replyToUser = messageService.getReplyMessage(chatId, "choose job"+profileData.getTown());
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
          if (botState.equals(BotState.PROFILE_FILLED)){
@@ -69,7 +69,7 @@ public class FillingProfileHandle implements InputMessageHandler{
                    replyToUser = messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), arr, i, profileData.getTown()));
                 }
             }catch (Exception e){
-                replyToUser = messageService.getReplyMessage(userId, " Not found");
+                replyToUser = messageService.getReplyMessage(userId, " Not found"+usersAnswer.getText());
             }
             profileData.setJob(usersAnswer.getText());
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
