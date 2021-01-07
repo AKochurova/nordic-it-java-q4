@@ -141,10 +141,11 @@ public class Bot extends TelegramWebhookBot {
         if (message != null && message.hasText()) {
             //log.info("New message from User:{}, chatId: {}, with text: {}",
             //message.getFrom().getUserName(), message.getChatId(), message.getText());
-            replyMessage = handleInputMessage(message);
+            /*replyMessage =*/ handleInputMessage(message);
+
 
         }
-        return replyMessage;
+        return /*replyMessage*/null;
     }
 
 
@@ -154,7 +155,7 @@ public class Bot extends TelegramWebhookBot {
 
 
 
-    public SendMessage handleInputMessage(Message message){
+    public /*SendMessage*/void handleInputMessage(Message message){
             String inputMsg = message.getText();
             int userId = message.getFrom().getId();
 
@@ -176,9 +177,9 @@ public class Bot extends TelegramWebhookBot {
 
             userDataCache.setUsersCurrentBotState(userId, botState);
             InputMessageHandler currentMessageHandler = new FillingProfileHandle(userDataCache, messageService);
-            replyMessage = currentMessageHandler.handle(message);
+            /*replyMessage =*/ currentMessageHandler.handle(message);
 
-            return replyMessage;
+            //return replyMessage;
         }
 
 

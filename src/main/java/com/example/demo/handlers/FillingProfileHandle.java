@@ -1,5 +1,6 @@
 package com.example.demo.handlers;
 
+import com.example.demo.Bot;
 import com.example.demo.BotState;
 import com.example.demo.Jobs;
 import com.example.demo.Model;
@@ -25,11 +26,11 @@ public class FillingProfileHandle implements InputMessageHandler{
 
 
     @Override
-    public SendMessage handle(Message message) {
+    public/* SendMessage*/void handle(Message message) {
         if(userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.FILLING_PROFILE)){
             userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.CHOOSE_CITY);
         }
-        return processUsersInput(message);
+        /*return*/ processUsersInput(message);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class FillingProfileHandle implements InputMessageHandler{
         return BotState.FILLING_PROFILE;
     }
 
-    private SendMessage processUsersInput(Message inputMsg){
+    private /*SendMessage*/ void processUsersInput(Message inputMsg){
         Message usersAnswer = inputMsg;
         int userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();
@@ -48,12 +49,13 @@ public class FillingProfileHandle implements InputMessageHandler{
         SendMessage replyToUser = null;
 
         if (botState.equals(BotState.CHOOSE_CITY)){
-            replyToUser = messageService.getReplyMessage(chatId, "choose city");
+            /*replyToUser =*/ messageService.getReplyMessage(chatId, "choose city");
+
             userDataCache.setUsersCurrentBotState(userId, BotState.FIND_JOB);
         }
         if (botState.equals(BotState.FIND_JOB)){
             profileData.setTown(usersAnswer.getText());
-            replyToUser = messageService.getReplyMessage(chatId, "choose job"+profileData.getTown());
+            messageService.getReplyMessage(chatId, "choose job"+profileData.getTown());
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
          if (botState.equals(BotState.PROFILE_FILLED)){
@@ -66,10 +68,10 @@ public class FillingProfileHandle implements InputMessageHandler{
             try {
 
                 for (int i=0; i<arr.size(); i++) {
-                   replyToUser = messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(),  profileData.getTown()));
+                   messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, arr,  profileData.getTown()));
                 }
             }catch (Exception e){
-                replyToUser = messageService.getReplyMessage(userId, " Not found"+usersAnswer.getText());
+                messageService.getReplyMessage(userId, " Not found"+usersAnswer.getText());
             }
             profileData.setJob(usersAnswer.getText());
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
@@ -78,7 +80,7 @@ public class FillingProfileHandle implements InputMessageHandler{
         }
         userDataCache.saveUserProfileData(userId, profileData);
 
-        return replyToUser;
+      //  return replyToUser;
     }
 
 }

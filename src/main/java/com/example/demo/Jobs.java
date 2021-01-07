@@ -9,17 +9,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Jobs {
-    public static String getJobs(String message,  String town) throws IOException {
+    public static String getJobs(String message, int num, ArrayList<Model> arr, String town) throws IOException {
 
         String str="https://api.superjob.ru/2.0/v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f/vacancies/?"+"town="+town+"&keyword="+message;
         URL url = new URL(str);
 
 
-        ArrayList<Model> arr = new ArrayList<>();
-        for(int i=0; i<5; i++){
-            Model m = new Model();
-            arr.add(m);
-        }
         Scanner scanner = new Scanner((InputStream)url.getContent());
         String result = "";
         String answer = "";
@@ -33,19 +28,19 @@ public class Jobs {
 
 
 
-        for (int i=0; i<arr.size(); i++) {
 
-            JSONObject obj = array.getJSONObject(i);
-            arr.get(i).setName((String) obj.get("profession"));
-            arr.get(i).setUrl((String) obj.get("link"));
+
+            JSONObject obj = array.getJSONObject(num);
+            arr.get(num).setName((String) obj.get("profession"));
+            arr.get(num).setUrl((String) obj.get("link"));
             if (!obj.get("address").equals(null))
-                arr.get(i).setArea((String) obj.get("address"));
-            else arr.get(i).setArea("не указано");
-            arr.get(i).setFirm((String) obj.get("firm_name"));
+                arr.get(num).setArea((String) obj.get("address"));
+            else arr.get(num).setArea("не указано");
+            arr.get(num).setFirm((String) obj.get("firm_name"));
 
-            answer+=arr.get(i).getName()+"\n"+arr.get(i).getArea()+"\n"+arr.get(i).getFirm()+"\n"+arr.get(i).getUrl()+"\n"+"\n";
-        }
-        return answer;
+
+
+        return arr.get(num).getName()+"\n"+arr.get(num).getArea()+"\n"+arr.get(num).getFirm()+"\n"+arr.get(num).getUrl()+"\n";
 
     }
 }
