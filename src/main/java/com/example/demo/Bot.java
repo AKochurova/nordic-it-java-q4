@@ -1,12 +1,7 @@
 package com.example.demo;
 import com.example.demo.cache.UserDataCache;
-import org.apache.log4j.Logger;
+import com.example.demo.handlers.UserProfileData;
 
-
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
-import com.example.demo.handlers.FillingProfileHandle;
-import com.example.demo.handlers.InputMessageHandler;
 import com.example.demo.service.ReplyMessageService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -14,18 +9,13 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+/*import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;*/
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+
 
 @Component
 public class Bot extends TelegramWebhookBot {
@@ -87,6 +77,7 @@ public class Bot extends TelegramWebhookBot {
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }*/
    public void sendMsg(SendMessage sendMessage){
+
 
        try{
 
@@ -176,12 +167,65 @@ public class Bot extends TelegramWebhookBot {
             }
 
             userDataCache.setUsersCurrentBotState(userId, botState);
-            InputMessageHandler currentMessageHandler = new FillingProfileHandle(userDataCache, messageService);
-            /*replyMessage =*/ currentMessageHandler.handle(message);
+            //InputMessageHandler currentMessageHandler = new FillingProfileHandle(userDataCache, messageService);
+           /* replyMessage = currentMessageHandler.*/handle(message);
 
             //return replyMessage;
         }
 
+
+
+    public /*SendMessage*/void handle(Message message) {
+        if(userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.FILLING_PROFILE)){
+            userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.CHOOSE_CITY);
+        }
+        /*return*/ processUsersInput(message);
+    }
+
+    private /*SendMessage*/void   processUsersInput(Message inputMsg){
+        Message usersAnswer = inputMsg;
+        int userId = inputMsg.getFrom().getId();
+        long chatId = inputMsg.getChatId();
+
+        UserProfileData profileData = userDataCache.getUserProfileData(userId);
+        BotState botState = userDataCache.getUsersCurrentBotState(userId);
+
+        SendMessage replyToUser = null;
+
+        if (botState.equals(BotState.CHOOSE_CITY)){
+            /*replyToUser =*/ sendMsg(messageService.getReplyMessage(chatId, "choose city"));
+
+            userDataCache.setUsersCurrentBotState(userId, BotState.FIND_JOB);
+        }
+        if (botState.equals(BotState.FIND_JOB)){
+            profileData.setTown(usersAnswer.getText());
+            sendMsg(messageService.getReplyMessage(chatId, "choose job"+profileData.getTown()));
+            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        }
+        if (botState.equals(BotState.PROFILE_FILLED)){
+
+            ArrayList<Model> arr = new ArrayList<>();
+            for(int i=0; i<5; i++){
+                Model m = new Model();
+                arr.add(m);
+            }
+            try {
+
+                for (int i=0; i<arr.size(); i++) {
+                    sendMsg(messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, arr,  profileData.getTown())));
+                }
+            }catch (Exception e){
+                sendMsg(messageService.getReplyMessage(userId, " Not found"+usersAnswer.getText()));
+            }
+            profileData.setJob(usersAnswer.getText());
+            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
+
+
+        }
+        userDataCache.saveUserProfileData(userId, profileData);
+
+        //return replyToUser;
+    }
 
 
 
