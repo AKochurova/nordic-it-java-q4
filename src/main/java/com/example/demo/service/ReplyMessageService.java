@@ -9,7 +9,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class ReplyMessageService {
     public SendMessage getReplyMessage(long chatId, String replyMessage){
 
-
         return new SendMessage(chatId, replyMessage);
 
     }
