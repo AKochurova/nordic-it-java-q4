@@ -6,6 +6,7 @@ import com.example.demo.service.ReplyMessageService;
 import com.example.demo.superjobapi.Jobs;
 import com.example.demo.superjobapi.Model;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -22,8 +23,10 @@ import java.util.ArrayList;
 @PropertySource("classpath:application.properties")
 public class Bot extends TelegramWebhookBot {
 
-    private UserDataCache userDataCache = new UserDataCache();
-    private ReplyMessageService messageService = new ReplyMessageService();
+    @Autowired
+    private UserDataCache userDataCache;
+    @Autowired
+    private ReplyMessageService messageService;
     
     @Value("${telegram.username}")
     private String botUsername;
@@ -40,7 +43,7 @@ public class Bot extends TelegramWebhookBot {
             buttons.setButton(sendMessage);
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error("Ошибка отправки сообщения пользователю");
         }
     }
 
@@ -49,7 +52,7 @@ public class Bot extends TelegramWebhookBot {
 
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
-            log.info("New message from User:{}, chatId: {}, with text: {}",
+            log.info("Новое сообщение от пользователя:{}, chatId: {}, with text: {}",
                     message.getFrom().getUserName(), message.getChatId(), message.getText());
             handleInputMessage(message);
 
