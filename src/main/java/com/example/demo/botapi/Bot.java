@@ -6,6 +6,8 @@ import com.example.demo.service.ReplyMessageService;
 import com.example.demo.superjobapi.Jobs;
 import com.example.demo.superjobapi.Model;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -17,10 +19,18 @@ import java.util.ArrayList;
 
 @Slf4j
 @Component
+@PropertySource("classpath:application.properties")
 public class Bot extends TelegramWebhookBot {
 
     private UserDataCache userDataCache = new UserDataCache();
     private ReplyMessageService messageService = new ReplyMessageService();
+    
+    @Value("${telegram.username}")
+    private String botUsername;
+    @Value("${telegram.webhook}")
+    private String botPath;
+    @Value("${telegram.token}")
+    private String botToken;
 
     public void sendMsg(SendMessage sendMessage) {
 
@@ -122,17 +132,17 @@ public class Bot extends TelegramWebhookBot {
 
     @Override
     public String getBotUsername() {
-        return "JobSeekerBot";
+        return this.botUsername;
     }
 
     @Override
     public String getBotToken() {
-        return "1494861198:AAH8K7yIpRcohFyiLB_Ale_UAi_9U3l7RBE";
+        return this.botToken;
     }
 
     @Override
     public String getBotPath() {
-        return "https://jobseeker-bot.herokuapp.com/";
+        return this.botPath;
     }
 
 

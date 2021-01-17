@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class UserDataCache {
-    private Map<Integer, BotState> userBotStates = new HashMap<>();
-    private Map<Integer, UserProfileData> usersProfileData = new HashMap<>();
+    private Map<Integer, BotState> userBotStates = new ConcurrentHashMap<>();
+    private Map<Integer, UserProfileData> usersProfileData = new ConcurrentHashMap<>();
 
     public BotState getUsersCurrentBotState(int userId) {
         BotState botState = userBotStates.get(userId);
