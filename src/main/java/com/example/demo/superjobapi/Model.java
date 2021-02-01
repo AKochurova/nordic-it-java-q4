@@ -1,60 +1,47 @@
 package com.example.demo.superjobapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Model {
-    String name;
-    String area;
-    String firm;
-    String url;
-    Long salary;
+    String profession;
+    String address;
+    String firm_name;
+    String link;
 
-    public Long getSalary() {
-        return salary;
+
+
+    public String getLink() {
+        return link;
     }
 
-    public void setSalary(Long salary) {
-        this.salary = salary;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public String getLogo() {
-        return logo;
+    public String getProfession() {
+        return profession;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 
-    String logo;
-
-
-    public String getUrl() {
-        return url;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getName() {
-        return name;
+    public String getFirm_name() {
+        return firm_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getFirm() {
-        return firm;
-    }
-
-    public void setFirm(String firm) {
-        this.firm = firm;
+    public void setFirm_name(String firm_name) {
+        this.firm_name = firm_name;
     }
 }

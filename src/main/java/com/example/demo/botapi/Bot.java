@@ -110,15 +110,11 @@ public class Bot extends TelegramWebhookBot {
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
 
-            ArrayList<Model> arr = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                Model m = new Model();
-                arr.add(m);
-            }
+
             try {
 
-                for (int i = 0; i < arr.size(); i++) {
-                    sendMsg(messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, arr, profileData.getTown())));
+                for (int i = 0; i < 5; i++) {
+                    sendMsg(messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown())));
                 }
             } catch (Exception e) {
                 sendMsg(messageService.getReplyMessage(userId, " Не найдено: " + usersAnswer.getText()));
