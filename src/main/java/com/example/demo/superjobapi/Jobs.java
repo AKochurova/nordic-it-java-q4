@@ -24,7 +24,7 @@ public class Jobs {
 
         Model[] mods = mapper.readValue(objContent.toString(), Model[].class);
 
-        return mods[num].getProfession() + "\n" + mods[num].getAddress() + "\n" + mods[num].getFirm_name() + "\n" + mods[num].getLink() + "\n";
+        return mods[num].getProfession() + "\n" /*+ mods[num].getAddress() + "\n" + mods[num].getFirm_name() + "\n"*/ + mods[num].getLink() + "\n";
 
     }
 }

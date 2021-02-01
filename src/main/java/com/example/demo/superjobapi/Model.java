@@ -1,14 +1,14 @@
 package com.example.demo.superjobapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Model {
     String profession;
-    String address;
-    String firm_name;
+    //String address;
+    //String firm_name;
     String link;
 
 
@@ -29,19 +29,19 @@ public class Model {
         this.profession = profession;
     }
 
-    public String getAddress() {
+   /*public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
+    }*/
 
-    public String getFirm_name() {
+    /*public String getFirm_name() {
         return firm_name;
     }
 
     public void setFirm_name(String firm_name) {
         this.firm_name = firm_name;
-    }
+    }*/
 }
