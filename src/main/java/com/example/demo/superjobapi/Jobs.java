@@ -24,16 +24,15 @@ public class Jobs {
 
         Model[] mods = mapper.readValue(objContent.toString(), Model[].class);
 
-        StringBuilder stringBuilder = new StringBuilder(mods[num].getProfession()+"\n");
+        String stringBuilder = mods[num].getProfession() + "\n" + mods[num].getFirm_name() + "\n" +
+                mods[num].getLink() + "\n";
 
-        if (!mods[num].getAddress().equals(null)){
-            stringBuilder.append(mods[num].getAddress()).append("\n");
+        if (mods[num].getAddress() != null){
+            stringBuilder += mods[num].getAddress() + "\n";
         }
-        else stringBuilder.append("Адрес не указан\n");
-        stringBuilder.append(mods[num].getFirm_name()).append("\n");
-        stringBuilder.append(mods[num].getLink()).append("\n");
-
-        return stringBuilder.toString();
+        else stringBuilder += "Адрес не указан\n";
+        
+        return stringBuilder;
 
     }
 }
