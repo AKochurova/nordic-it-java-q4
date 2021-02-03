@@ -119,7 +119,8 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
         }
         if(botState.equals(BotState.GET_CODE)){
-            sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes(userId)));
+            sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes((""+userId))));
+            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
 

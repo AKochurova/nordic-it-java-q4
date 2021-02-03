@@ -23,7 +23,7 @@ public class WebHookController {
     }
 
     @RequestMapping(value = "/{id}")
-    public void getCode(@PathVariable("id") Integer id, @RequestParam(value = "code") String code){
+    public void getCode(@PathVariable("id") String id, @RequestParam(value = "code") String code){
        aouth.setUsersCodes(id, code);
     }
 }
