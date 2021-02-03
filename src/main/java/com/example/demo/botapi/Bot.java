@@ -130,6 +130,8 @@ public class Bot extends TelegramWebhookBot {
                 log.error("error");
             }
 
+
+
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {

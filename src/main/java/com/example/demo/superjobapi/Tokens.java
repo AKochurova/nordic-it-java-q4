@@ -2,13 +2,18 @@ package com.example.demo.superjobapi;
 
 import com.example.demo.cache.Aouth;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+@Slf4j
 public class Tokens {
     public static String getTokens(int userId) throws IOException {
         String str = "https://api.superjob.ru/2.0/oauth2/access_token/?code="+Aouth.getUsersCodes(""+userId)+"&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
@@ -20,12 +25,26 @@ public class Tokens {
 
         JSONObject object = new JSONObject(result);
         String token = (String) object.get("access_token");
-        String str2 = "https://api.superjob.ru/2.0/user/current/";
-        URL url2 = new URL(str2);
 
-        Scanner scanner2 = new Scanner((InputStream) url2.getContent());
-        String result2 = "";
-        result2 += scanner2.nextLine();
-        return result2;
+
+
+
+        URL url2 = new URL("https://api.superjob.ru/2.0/user/current");
+        HttpURLConnection con = (HttpURLConnection) url2.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer "+token);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+
+        }
+        log.info("Info: " + content.toString());
+        in.close();
+        con.disconnect();
+
+        return content.toString();
     }
 }
