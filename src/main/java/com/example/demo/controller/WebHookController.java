@@ -23,7 +23,7 @@ public class WebHookController {
         return telegramBot.onWebhookUpdateReceived(update);
     }
 
-    @RequestMapping(value = "/getcode/{id}")
+    @RequestMapping(value = "/getcode/{id}", method = RequestMethod.GET)
     public void getCode(@PathVariable("id") String id, @RequestParam("code") String code){
         log.info("Получен код:{}, userId: {}", id, code);
        aouth.setUsersCodes(id, code);
