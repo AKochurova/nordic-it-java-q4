@@ -114,7 +114,7 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if(botState.equals(BotState.ADD_FAVORITE)){
-            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/"+userId;
+            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode"+userId;
             sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ:\n "+str));
             userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
         }
