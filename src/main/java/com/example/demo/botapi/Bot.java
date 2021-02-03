@@ -5,7 +5,7 @@ import com.example.demo.cache.UserDataCache;
 import com.example.demo.cache.UserProfileData;
 import com.example.demo.service.ReplyMessageService;
 import com.example.demo.superjobapi.Jobs;
-import com.example.demo.superjobapi.Model;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import java.util.ArrayList;
+
 
 @Slf4j
 @Component
@@ -70,6 +70,9 @@ public class Bot extends TelegramWebhookBot {
         BotState botState;
 
         switch (inputMsg) {
+            case "/дальше":
+                botState = BotState.GET_CODE;
+                break;
             case "/Добавить в избранное":
                 botState = BotState.ADD_FAVORITE;
                 break;
@@ -114,9 +117,9 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if(botState.equals(BotState.ADD_FAVORITE)){
-            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode"+userId;
+            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
             sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ:\n "+str));
-            userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
+            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if(botState.equals(BotState.GET_CODE)){
             sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes((""+userId))));
