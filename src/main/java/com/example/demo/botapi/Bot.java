@@ -70,9 +70,6 @@ public class Bot extends TelegramWebhookBot {
         BotState botState;
 
         switch (inputMsg) {
-            case "/дальше":
-                botState = BotState.GET_CODE;
-                break;
             case "/Добавить в избранное":
                 botState = BotState.ADD_FAVORITE;
                 break;
@@ -119,11 +116,10 @@ public class Bot extends TelegramWebhookBot {
         if(botState.equals(BotState.ADD_FAVORITE)){
             String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode"+userId;
             sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ:\n "+str));
-            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
+            userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
         }
         if(botState.equals(BotState.GET_CODE)){
-            //sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes((""+userId))));
-            log.info("Получен код:{}", ao.getUsersCodes(""+userId));
+            sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes((""+userId))));
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
