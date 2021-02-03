@@ -1,5 +1,6 @@
 package com.example.demo.botapi;
 
+import com.example.demo.cache.Aouth;
 import com.example.demo.cache.UserDataCache;
 import com.example.demo.cache.UserProfileData;
 import com.example.demo.service.ReplyMessageService;
@@ -27,6 +28,8 @@ public class Bot extends TelegramWebhookBot {
     private UserDataCache userDataCache;
     @Autowired
     private ReplyMessageService messageService;
+
+    private Aouth ao;
     
     @Value("${telegram.username}")
     private String botUsername;
@@ -67,7 +70,9 @@ public class Bot extends TelegramWebhookBot {
         BotState botState;
 
         switch (inputMsg) {
-            
+            case "/Добавить в избранное":
+                botState = BotState.ADD_FAVORITE;
+                break;
             case "/start":
                 botState = BotState.FILLING_PROFILE;
                 break;
@@ -107,6 +112,14 @@ public class Bot extends TelegramWebhookBot {
             profileData.setTown(usersAnswer.getText());
             sendMsg(messageService.getReplyMessage(chatId, "Введите работу"));
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        }
+        if(botState.equals(BotState.ADD_FAVORITE)){
+            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/"+userId;
+            sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ:\n "+str));
+            userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
+        }
+        if(botState.equals(BotState.GET_CODE)){
+            sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes(userId)));
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
 

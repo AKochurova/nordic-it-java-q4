@@ -31,6 +31,7 @@ public class Jobs {
             stringBuilder += mods[num].getAddress() + "\n";
         }
         else stringBuilder += "Адрес не указан\n";
+        stringBuilder += "/Добавить в избранное";
         
         return stringBuilder;
 
