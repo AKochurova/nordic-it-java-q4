@@ -24,6 +24,6 @@ public class WebHookController {
 
     @RequestMapping(value = "/{id}")
     public void getCode(@PathVariable("id") Integer id, @RequestParam(value = "code") String code){
-       aouth.setUsersCurrentBotState(id, code);
+       aouth.setUsersCodes(id, code);
     }
 }
