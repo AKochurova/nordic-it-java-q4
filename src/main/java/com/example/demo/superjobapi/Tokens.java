@@ -1,8 +1,7 @@
 package com.example.demo.superjobapi;
 
 import com.example.demo.cache.Aouth;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -21,6 +20,12 @@ public class Tokens {
 
         JSONObject object = new JSONObject(result);
         String token = (String) object.get("access_token");
-        return token;
+        String str2 = "https://api.superjob.ru/2.0/user/current/";
+        URL url2 = new URL(str2);
+
+        Scanner scanner2 = new Scanner((InputStream) url2.getContent());
+        String result2 = "";
+        result2 += scanner2.nextLine();
+        return result2;
     }
 }
