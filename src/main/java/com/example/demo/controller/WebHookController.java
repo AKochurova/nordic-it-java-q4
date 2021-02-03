@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RestController
 public class WebHookController {
     private final Bot telegramBot;
-    private final Aouth aouth = new Aouth();
+    private Aouth aouth = new Aouth();
 
     public WebHookController(Bot telegramBot){
         this.telegramBot = telegramBot;

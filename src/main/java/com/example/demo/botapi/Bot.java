@@ -6,6 +6,7 @@ import com.example.demo.cache.UserProfileData;
 import com.example.demo.service.ReplyMessageService;
 import com.example.demo.superjobapi.Jobs;
 
+import com.example.demo.superjobapi.Tokens;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+
 
 @Slf4j
 @Component
@@ -29,7 +32,6 @@ public class Bot extends TelegramWebhookBot {
     @Autowired
     private ReplyMessageService messageService;
 
-    private Aouth ao;
     
     @Value("${telegram.username}")
     private String botUsername;
@@ -122,7 +124,12 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if(botState.equals(BotState.GET_CODE)){
-            sendMsg(messageService.getReplyMessage(chatId, ao.getUsersCodes((""+userId))));
+            try {
+                sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
+            } catch (IOException e) {
+                log.error("error");
+            }
+
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
