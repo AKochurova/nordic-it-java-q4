@@ -115,10 +115,7 @@ public void answerCallbackQuery(String callbackId, String message){
         switch (callbackQuery.getData()){
             case "next":
                 try {
-                    if (Tokens.getTokens(userId, userDataCache.getUsersFavId(userId)).equals("true"))
-                        sendMsg(messageService.getReplyMessage(chatId, "Вакансия добавлена в избранное"));
-                    else sendMsg(messageService.getReplyMessage(chatId, "Произошла ошибка"));
-                    //sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userDataCache.getUsersFavId(userId))));
+                    sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userDataCache.getUsersFavId(userId))));
                 } catch (IOException e) {
                     log.error("error");
                 }
