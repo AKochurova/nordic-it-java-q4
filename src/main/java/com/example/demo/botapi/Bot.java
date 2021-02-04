@@ -114,17 +114,19 @@ public void answerCallbackQuery(String callbackId, String message){
     public void handleCallbackQuery(CallbackQuery callbackQuery){
         int userId = callbackQuery.getFrom().getId();
         Long chatId = callbackQuery.getMessage().getChatId();
+        String userFavId=null;
         String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
         switch (callbackQuery.getData()){
             case "next":
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
+                    sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userFavId)));
                 } catch (IOException e) {
                     log.error("error");
                 }
                 break;
             default:
                 sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n"+str));
+                userFavId=callbackQuery.getData();
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
         }
@@ -181,11 +183,11 @@ public void answerCallbackQuery(String callbackId, String message){
         }
 
         if(botState.equals(BotState.GET_CODE)){
-            try {
+            /*try {
                 sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
             } catch (IOException e) {
                 log.error("error");
-            }
+            }*/
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
