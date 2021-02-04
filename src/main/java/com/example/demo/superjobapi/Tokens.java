@@ -43,6 +43,12 @@ public class Tokens {
         in.close();
         con.disconnect();
 
-        return content.toString();
+        JSONObject object2 = new JSONObject(content);
+        String res = (String) object2.get("result");
+        String answer="true";
+        if (res.equals("false"))
+            answer="false";
+
+        return answer;
     }
 }
