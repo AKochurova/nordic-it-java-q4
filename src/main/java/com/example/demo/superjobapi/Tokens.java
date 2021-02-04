@@ -28,11 +28,11 @@ public class Tokens {
         String token = (String) object.get("access_token");
 
 
-        //URL url2 = new URL("https://api.superjob.ru/2.0/user/current");
-        URL url2 = new URL("https://api.superjob.ru/2.0/favorites/"+message+"/");
+        URL url2 = new URL("https://api.superjob.ru/2.0/user/current");
+        //URL url2 = new URL("https://api.superjob.ru/2.0/favorites/"+message+"/");
         HttpURLConnection con = (HttpURLConnection) url2.openConnection();
-        //con.setRequestMethod("GET");
-        con.setRequestMethod("POST");
+        con.setRequestMethod("GET");
+        //con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer "+token);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -45,7 +45,7 @@ public class Tokens {
         log.info("Info: " + content.toString());
         in.close();
         con.disconnect();
-        
+
 
         return content.toString();
     }
