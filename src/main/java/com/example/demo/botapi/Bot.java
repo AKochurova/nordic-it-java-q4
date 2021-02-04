@@ -1,13 +1,10 @@
 package com.example.demo.botapi;
 
-import com.example.demo.cache.Aouth;
 import com.example.demo.cache.UserDataCache;
 import com.example.demo.cache.UserProfileData;
 import com.example.demo.service.ReplyMessageService;
-import com.example.demo.superjobapi.Favorites;
 import com.example.demo.superjobapi.Jobs;
 
-import com.example.demo.superjobapi.Model;
 import com.example.demo.superjobapi.Tokens;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +115,10 @@ public void answerCallbackQuery(String callbackId, String message){
         switch (callbackQuery.getData()){
             case "next":
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userDataCache.getUsersFavId(userId))));
+                    if (Tokens.getTokens(userId, userDataCache.getUsersFavId(userId)).equals("true"))
+                        answerCallbackQuery(callbackQuery.getId(), "Вакансия добавлена в избранное");
+                    else answerCallbackQuery(callbackQuery.getId(), "Произошла ошибка");
+                    //sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userDataCache.getUsersFavId(userId))));
                 } catch (IOException e) {
                     log.error("error");
                 }
@@ -195,9 +195,7 @@ public void answerCallbackQuery(String callbackId, String message){
             try {
 
                 for (int i = 0; i < 5; i++) {
-
-                    //sendMsg(messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown())));
-                    sendInlineButtons(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown()), "Добавить в избранное", Favorites.getFavorites(usersAnswer.getText(), i, profileData.getTown()));
+                    sendInlineButtons(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown()), "Добавить в избранное", Jobs.getFavorites(usersAnswer.getText(), i, profileData.getTown()));
                 }
             } catch (Exception e) {
                 sendMsg(messageService.getReplyMessage(userId, " Не найдено: " + usersAnswer.getText()));

@@ -27,11 +27,8 @@ public class Tokens {
         JSONObject object = new JSONObject(result);
         String token = (String) object.get("access_token");
 
-
-        //URL url2 = new URL("https://api.superjob.ru/2.0/user/current");
         URL url2 = new URL("https://api.superjob.ru/2.0/favorites/"+idFav+"/");
         HttpURLConnection con = (HttpURLConnection) url2.openConnection();
-        //con.setRequestMethod("GET");
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer "+token);
 
@@ -46,7 +43,12 @@ public class Tokens {
         in.close();
         con.disconnect();
 
+        JSONObject object2 = new JSONObject(result);
+        String res = (String) object2.get("result");
+        String answer="true";
+        if (res.equals("false"))
+            answer="false";
 
-        return content.toString();
+        return answer;
     }
 }
