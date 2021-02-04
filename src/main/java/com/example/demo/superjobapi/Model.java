@@ -11,8 +11,6 @@ public class Model {
     String firm_name;
     String link;
 
-
-
     public String getLink() {
         return link;
     }
