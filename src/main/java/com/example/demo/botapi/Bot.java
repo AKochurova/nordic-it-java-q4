@@ -112,10 +112,13 @@ public void answerCallbackQuery(String callbackId, String message){
     }
 
     public void handleCallbackQuery(CallbackQuery callbackQuery){
-        long userId = callbackQuery.getFrom().getId();
+        int userId = callbackQuery.getFrom().getId();
         String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
         sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n"+str));
+        userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
+        processUsersInput(callbackQuery.getMessage());
     }
+
     public void handleInputMessage(Message message) {
         String inputMsg = message.getText();
         int userId = message.getFrom().getId();
@@ -123,12 +126,7 @@ public void answerCallbackQuery(String callbackId, String message){
         BotState botState;
 
         switch (inputMsg) {
-            case "/дальше":
-                botState = BotState.GET_CODE;
-                break;
-            case "/Добавить в избранное":
-                botState = BotState.ADD_FAVORITE;
-                break;
+
             case "/start":
                 botState = BotState.FILLING_PROFILE;
                 break;
@@ -169,14 +167,10 @@ public void answerCallbackQuery(String callbackId, String message){
             sendMsg(messageService.getReplyMessage(chatId, "Введите работу"));
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
-        if(botState.equals(BotState.ADD_FAVORITE)){
-            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
-            sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ:\n "+str));
-            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
-        }
+
         if(botState.equals(BotState.GET_CODE)){
             try {
-                sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
+                sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, inputMsg)));
             } catch (IOException e) {
                 log.error("error");
             }
