@@ -10,7 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserDataCache {
     private Map<Integer, BotState> userBotStates = new ConcurrentHashMap<>();
     private Map<Integer, UserProfileData> usersProfileData = new ConcurrentHashMap<>();
+    private Map<Integer, String> userFavId = new ConcurrentHashMap<>();
 
+    public String getUsersFavId(int userId) {
+        return userFavId.get(userId);
+    }
+    public void setUsersFavId(int userId, String id) {
+        userFavId.put(userId, id);
+    }
     public BotState getUsersCurrentBotState(int userId) {
         BotState botState = userBotStates.get(userId);
         if (botState == null){
