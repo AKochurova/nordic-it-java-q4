@@ -117,11 +117,14 @@ public void answerCallbackQuery(String callbackId, String message){
         String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
         switch (callbackQuery.getData()){
             case "next":
-                processUsersInput(callbackQuery.getMessage());
+                try {
+                    sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
+                } catch (IOException e) {
+                    log.error("error");
+                }
                 break;
             default:
                 sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n"+str));
-                userDataCache.setUsersCurrentBotState(userId, BotState.GET_CODE);
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
         }
@@ -179,7 +182,7 @@ public void answerCallbackQuery(String callbackId, String message){
 
         if(botState.equals(BotState.GET_CODE)){
             try {
-                sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, inputMsg)));
+                sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
             } catch (IOException e) {
                 log.error("error");
             }
