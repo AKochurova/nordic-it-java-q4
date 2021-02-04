@@ -114,7 +114,7 @@ public void answerCallbackQuery(String callbackId, String message){
     public void handleCallbackQuery(CallbackQuery callbackQuery){
         long userId = callbackQuery.getFrom().getId();
         String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
-        answerCallbackQuery(callbackQuery.getId(), callbackQuery.getData()+"Авторизируйтесь на SJ:\n"+str);
+        sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n"+str));
     }
     public void handleInputMessage(Message message) {
         String inputMsg = message.getText();
@@ -190,7 +190,7 @@ public void answerCallbackQuery(String callbackId, String message){
                 for (int i = 0; i < 5; i++) {
 
                     //sendMsg(messageService.getReplyMessage(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown())));
-                    sendInlineButtons(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown()), "\nДобавить в избранное", Favorites.getFavorites(usersAnswer.getText(), i, profileData.getTown()));
+                    sendInlineButtons(chatId, Jobs.getJobs(usersAnswer.getText(), i, profileData.getTown()), "Добавить в избранное", Favorites.getFavorites(usersAnswer.getText(), i, profileData.getTown()));
                 }
             } catch (Exception e) {
                 sendMsg(messageService.getReplyMessage(userId, " Не найдено: " + usersAnswer.getText()));
