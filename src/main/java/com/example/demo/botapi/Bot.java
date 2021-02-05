@@ -91,10 +91,9 @@ public void answerCallbackQuery(String callbackId, String message){
         log.error("Ошибка отправки ответа на callback пользователю");
     }
 }
-    public void answerCallbackQuery(String callbackId, String message, String url){
+    public void answerCallbackQueryCh(String callbackId, String url){
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
         answer.setCallbackQueryId(callbackId);
-        answer.setText(message);
         answer.setUrl(url);
         answer.setShowAlert(true);
         try {
@@ -139,7 +138,7 @@ public void answerCallbackQuery(String callbackId, String message){
                 break;
             default:
                 //sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
-                answerCallbackQuery(callbackQuery.getId(), "Авторизируйтесь на SJ:", str);
+                answerCallbackQueryCh(callbackQuery.getId(), str);
                 userDataCache.setUsersFavId(userId, callbackQuery.getData());
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
