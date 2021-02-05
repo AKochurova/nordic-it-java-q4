@@ -1,5 +1,6 @@
 package com.example.demo.botapi;
 
+import com.example.demo.cache.Aouth;
 import com.example.demo.cache.UserDataCache;
 import com.example.demo.cache.UserProfileData;
 import com.example.demo.service.ReplyMessageService;
@@ -124,8 +125,9 @@ public void answerCallbackQuery(String callbackId, String message){
                 }
                 break;
             default:
-                //sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n"+str));
-                answerCallbackQuery(callbackQuery.getId(), str);
+                if(Aouth.getUsersCodes(userId + "") == null) {
+                    sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
+                }
                 userDataCache.setUsersFavId(userId, callbackQuery.getData());
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
