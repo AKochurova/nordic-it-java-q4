@@ -70,17 +70,7 @@ public class Tokens {
         in.close();
         con.disconnect();
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(content.toString());
-        JsonNode objContent = root.path("objects");
-
-        Model[] mods = mapper.readValue(objContent.toString(), Model[].class);
-        String res = "";
-        for (Model i : mods) {
-            res = i.getProfession() + "\n" + i.getLink() + "\n";
-        }
-
-        return res;
+        return content.toString();
     }
 
 }
