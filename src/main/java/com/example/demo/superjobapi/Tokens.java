@@ -70,7 +70,14 @@ public class Tokens {
         in.close();
         con.disconnect();
 
-        return content.toString();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(content.toString());
+        JsonNode objContent = root.path("objects");
+
+        Id[] ides = mapper.readValue(objContent.toString(), Id[].class);
+
+        String string = ides[1].getId()+"";
+        return string;
     }
 
 }
