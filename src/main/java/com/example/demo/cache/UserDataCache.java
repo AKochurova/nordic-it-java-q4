@@ -11,6 +11,14 @@ public class UserDataCache {
     private Map<Integer, BotState> userBotStates = new ConcurrentHashMap<>();
     private Map<Integer, UserProfileData> usersProfileData = new ConcurrentHashMap<>();
     private Map<Integer, String> userFavId = new ConcurrentHashMap<>();
+    private Map<Integer, String> userToken = new ConcurrentHashMap<>();
+
+    public String getUsersToken(int userId) {
+        return userToken.get(userId);
+    }
+    public void setUsersToken(int userId, String token) {
+        userToken.put(userId, token);
+    }
 
     public String getUsersFavId(int userId) {
         return userFavId.get(userId);
@@ -18,6 +26,7 @@ public class UserDataCache {
     public void setUsersFavId(int userId, String id) {
         userFavId.put(userId, id);
     }
+
     public BotState getUsersCurrentBotState(int userId) {
         BotState botState = userBotStates.get(userId);
         if (botState == null){

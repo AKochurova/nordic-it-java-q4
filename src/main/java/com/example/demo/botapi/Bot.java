@@ -20,12 +20,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Slf4j
@@ -37,8 +34,10 @@ public class Bot extends TelegramWebhookBot {
     private UserDataCache userDataCache;
     @Autowired
     private ReplyMessageService messageService;
+    @Autowired
+    private Buttons buttons;
 
-    
+
     @Value("${telegram.username}")
     private String botUsername;
     @Value("${telegram.webhook}")
@@ -48,67 +47,39 @@ public class Bot extends TelegramWebhookBot {
 
     public void sendMsg(SendMessage sendMessage) {
 
-        Buttons buttons = new Buttons();
-
         try {
-            buttons.setButton(sendMessage);
+            buttons.setReplyButton(sendMessage);
             execute(sendMessage);
         } catch (TelegramApiException e) {
             log.error("Ошибка отправки сообщения пользователю");
         }
     }
-    public void sendInlineButtons(long chatId, String messageText, String buttonText, String callbackData){
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton keyboardButton = new InlineKeyboardButton().setText(buttonText);
 
-        if (callbackData != null){
-            keyboardButton.setCallbackData(callbackData);
-        }
-
-        List<InlineKeyboardButton> keyboardButtonsRaw1 = new ArrayList<>();
-        keyboardButtonsRaw1.add(keyboardButton);
-
-        List<List<InlineKeyboardButton>> rawList = new ArrayList<>();
-        rawList.add(keyboardButtonsRaw1);
-
-        inlineKeyboardMarkup.setKeyboard(rawList);
-
-        try{
+    public void sendInlineButtons(long chatId, String messageText, String buttonText, String callbackData) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = buttons.setInlineButton(buttonText, callbackData);
+        try {
             execute(new SendMessage().setChatId(chatId).setText(messageText).setReplyMarkup(inlineKeyboardMarkup));
-        }catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             log.error("Ошибка отправки callback пользователю");
         }
-}
-
-public void answerCallbackQuery(String callbackId, String message){
-    AnswerCallbackQuery answer = new AnswerCallbackQuery();
-    answer.setCallbackQueryId(callbackId);
-    answer.setText(message);
-    answer.setShowAlert(true);
-    try {
-        execute(answer);
-    }catch (TelegramApiException e){
-        log.error("Ошибка отправки ответа на callback пользователю");
     }
-}
-    public void answerCallbackQuery(String callbackId, String message, String url){
+
+    public void answerCallbackQuery(String callbackId, String message) {
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
         answer.setCallbackQueryId(callbackId);
         answer.setText(message);
-        answer.setUrl(url);
-        answer.setShowAlert(false);
+        answer.setShowAlert(true);
         try {
             execute(answer);
-        }catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             log.error("Ошибка отправки ответа на callback пользователю");
         }
     }
 
-
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
 
-        if (update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             log.info("Callback от пользователя: {}, сообщение: {} ", update.getCallbackQuery().getFrom().getUserName(), update.getCallbackQuery().getData());
             handleCallbackQuery(update.getCallbackQuery());
         }
@@ -122,14 +93,14 @@ public void answerCallbackQuery(String callbackId, String message){
         return null;
     }
 
-    public void handleCallbackQuery(CallbackQuery callbackQuery){
+    public void handleCallbackQuery(CallbackQuery callbackQuery) {
         int userId = callbackQuery.getFrom().getId();
         Long chatId = callbackQuery.getMessage().getChatId();
-        String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId;
-        switch (callbackQuery.getData()){
+        String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
+        switch (callbackQuery.getData()) {
             case "next":
                 try {
-                    if (Tokens.getTokens(userId, userDataCache.getUsersFavId(userId)))
+                    if (Tokens.getFavs(userDataCache.getUsersToken(userId), userDataCache.getUsersFavId(userId)))
                         answerCallbackQuery(callbackQuery.getId(), "Вакансия добавлена в избранное");
                     else answerCallbackQuery(callbackQuery.getId(), "Произошла ошибка");
                     //sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId, userDataCache.getUsersFavId(userId))));
@@ -138,9 +109,16 @@ public void answerCallbackQuery(String callbackId, String message){
                 }
                 break;
             default:
-                //sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
-                answerCallbackQuery(callbackQuery.getId(), "Авторизируйтесь на SJ:", str);
+                if (Aouth.getUsersCodes(userId+"")==null) {
+                    sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
+                }
                 userDataCache.setUsersFavId(userId, callbackQuery.getData());
+                    try {
+                        userDataCache.setUsersToken(userId, Tokens.getTokens(userId));
+                    }catch (IOException e){
+                        log.error("Не удалось получить токен");
+                    }
+
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
         }
@@ -196,7 +174,7 @@ public void answerCallbackQuery(String callbackId, String message){
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
 
-        if(botState.equals(BotState.GET_CODE)){
+        if (botState.equals(BotState.GET_CODE)) {
             /*try {
                 sendMsg(messageService.getReplyMessage(chatId,Tokens.getTokens(userId)));
             } catch (IOException e) {
