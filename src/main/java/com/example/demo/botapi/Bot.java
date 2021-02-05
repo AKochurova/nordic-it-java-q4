@@ -97,6 +97,12 @@ public class Bot extends TelegramWebhookBot {
         Long chatId = callbackQuery.getMessage().getChatId();
         String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
         switch (callbackQuery.getData()) {
+            case "favlist":
+                try {
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n"+Tokens.getFavsList(userId)));
+                }catch (IOException e){
+                    log.error("Не удалось отправить список вакансий");
+                }
             case "next":
                 try {
                     if (Tokens.getFavs(userId, userDataCache.getUsersFavId(userId)))
@@ -125,6 +131,9 @@ public class Bot extends TelegramWebhookBot {
 
         switch (inputMsg) {
 
+            case "/список избранных вакансий":
+                botState = BotState.GET_FAVSLIST;
+                break;
             case "/start":
                 botState = BotState.FILLING_PROFILE;
                 break;
@@ -166,6 +175,12 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
 
+        if (botState.equals(BotState.GET_FAVSLIST)) {
+            String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
+            sendMsg(messageService.getReplyMessage(chatId,"Авторизируйтесь на SJ:\n" + str));
+            sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "favlist");
+            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
+        }
         if (botState.equals(BotState.PROFILE_FILLED)) {
 
 

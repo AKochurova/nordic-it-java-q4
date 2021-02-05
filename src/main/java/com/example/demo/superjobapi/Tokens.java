@@ -54,5 +54,34 @@ public class Tokens {
 
         return answer;
     }
+    public static String getFavsList(int userId) throws IOException{
+        URL url3 = new URL("https://api.superjob.ru/2.0/favorites/");
+        HttpURLConnection con = (HttpURLConnection) url3.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer "+getTokens(userId));
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+
+        }
+        in.close();
+        con.disconnect();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(content.toString());
+        JsonNode objContent = root.path("objects");
+
+        FavVacancy[] vacancies = mapper.readValue(objContent.toString(), FavVacancy[].class);
+
+        StringBuilder string = new StringBuilder();
+
+        for (FavVacancy i : vacancies){
+            string.append(i.getProfession()).append("\n").append(i.getLink()).append("\n");
+        }
+        return string.toString();
+    }
 
 }
