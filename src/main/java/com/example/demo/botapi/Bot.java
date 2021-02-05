@@ -125,9 +125,6 @@ public class Bot extends TelegramWebhookBot {
 
         switch (inputMsg) {
 
-            case "/список избранных вакансий":
-                botState = BotState.GET_FAVSLIST;
-                break;
             case "/start":
                 botState = BotState.FILLING_PROFILE;
                 break;
@@ -169,14 +166,6 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
 
-        if (botState.equals(BotState.GET_FAVSLIST)) {
-            try {
-                sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n"+Tokens.getFavsList(userId)));
-            }catch (IOException e){
-                log.error("Не удалось отправить список вакансий");
-            }
-            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
-        }
         if (botState.equals(BotState.PROFILE_FILLED)) {
 
 
