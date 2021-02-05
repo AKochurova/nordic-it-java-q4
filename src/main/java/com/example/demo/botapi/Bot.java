@@ -91,6 +91,19 @@ public void answerCallbackQuery(String callbackId, String message){
         log.error("Ошибка отправки ответа на callback пользователю");
     }
 }
+    public void answerCallbackQuery(String callbackId, String message, String url){
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setCallbackQueryId(callbackId);
+        answer.setText(message);
+        answer.setUrl(url);
+        answer.setShowAlert(true);
+        try {
+            execute(answer);
+        }catch (TelegramApiException e){
+            log.error("Ошибка отправки ответа на callback пользователю");
+        }
+    }
+
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
@@ -125,9 +138,8 @@ public void answerCallbackQuery(String callbackId, String message){
                 }
                 break;
             default:
-                if(Aouth.getUsersCodes(userId + "") == null) {
-                    sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
-                }
+                //sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
+                answerCallbackQuery(callbackQuery.getId(), "Авторизируйтесь на SJ:", str);
                 userDataCache.setUsersFavId(userId, callbackQuery.getData());
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
                 break;
