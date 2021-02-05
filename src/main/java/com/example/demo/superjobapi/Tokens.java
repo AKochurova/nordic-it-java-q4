@@ -2,10 +2,10 @@ package com.example.demo.superjobapi;
 
 import com.example.demo.cache.Aouth;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 @Slf4j
 public class Tokens {
-    public static boolean getTokens(int userId, String idFav) throws IOException {
+    public static String getTokens(int userId) throws IOException {
         String str = "https://api.superjob.ru/2.0/oauth2/access_token/?code="+Aouth.getUsersCodes(""+userId)+"&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
         URL url = new URL(str);
 
@@ -27,10 +27,13 @@ public class Tokens {
         JSONObject object = new JSONObject(result);
         String token = (String) object.get("access_token");
 
+        return token;
+    }
+    public static boolean getFavs(int userId, String idFav) throws IOException{
         URL url2 = new URL("https://api.superjob.ru/2.0/favorites/"+idFav+"/");
         HttpURLConnection con = (HttpURLConnection) url2.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("Authorization", "Bearer "+token);
+        con.setRequestProperty("Authorization", "Bearer "+getTokens(userId));
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -51,4 +54,33 @@ public class Tokens {
 
         return answer;
     }
+    public static String getFavsList(int userId) throws IOException{
+        URL url3 = new URL("https://api.superjob.ru/2.0/favorites/");
+        HttpURLConnection con = (HttpURLConnection) url3.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Authorization", "Bearer "+getTokens(userId));
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+
+        }
+        in.close();
+        con.disconnect();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(content.toString());
+        JsonNode objContent = root.path("objects");
+
+        Model[] mods = mapper.readValue(objContent.toString(), Model[].class);
+        String res = "";
+        for (Model i : mods) {
+            res = i.getProfession() + "\n" + i.getLink() + "\n";
+        }
+
+        return res;
+    }
+
 }
