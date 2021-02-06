@@ -16,11 +16,11 @@ public class UserDataCache {
     public static Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
 
     public UserAouthData getUserAouth(int userId) {
-        return userAouth.get(userId);
-    }
-
-    public void setUserAouth(int userId, UserAouthData userAouthData) {
-        userAouth.put(userId, userAouthData);
+        UserAouthData userAouthData = userAouth.get(userId);
+        if (userAouthData == null){
+            userAouthData = new UserAouthData();
+        }
+        return userAouthData;
     }
 
     public String getUsersToken(int userId) {
