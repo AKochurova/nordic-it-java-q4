@@ -98,14 +98,15 @@ public class Bot extends TelegramWebhookBot {
         Long chatId = callbackQuery.getMessage().getChatId();
         //String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
         switch (callbackQuery.getData()) {
-            /*case "favlist":
+            case "favlist":
 
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n"+Tokens.getFavsList(userId)));
-                }catch (IOException e){
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(userDataCache.getUserAouth(userId).getLogin(),
+                            userDataCache.getUserAouth(userId).getPassword())));
+                } catch (IOException e) {
                     log.error("Не удалось отправить список вакансий");
                 }
-                break;*/
+                break;
             case "next":
                 try {
                     if (Tokens.getFavs(userDataCache.getUserAouth(userId).getLogin(),
@@ -187,12 +188,17 @@ public class Bot extends TelegramWebhookBot {
             /*String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
             sendMsg(messageService.getReplyMessage(chatId,"Авторизируйтесь на SJ:\n" + str));
             sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "favlist");*/
-            userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
-            try {
-                sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n"+Tokens.getFavsList(userAouthData.getLogin(),
-                        userAouthData.getPassword())));
-            }catch (IOException e){
-                log.error("Не удалось отправить список вакансий");
+            if (userDataCache.getUserAouth(userId).getLogin()==null) {
+                userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
+                sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ, введите логин\n"));
+            }else {
+                userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
+                try {
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(userAouthData.getLogin(),
+                            userAouthData.getPassword())));
+                } catch (IOException e) {
+                    log.error("Не удалось отправить список вакансий");
+                }
             }
         }
         if(botState.equals(BotState.GET_LOGIN)){
@@ -205,7 +211,8 @@ public class Bot extends TelegramWebhookBot {
                 Tokens.getTokens(userAouthData.getLogin(), usersAnswer.getText());
                 sendMsg(messageService.getReplyMessage(chatId, "Вы авторизированы"));
                 userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-                sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
+                sendInlineButtons(chatId, "Нажмите чтобы добавить в избранное", "Далее", "next");
+                sendInlineButtons(chatId, "Нажмите чтобы просмотреть список избранного", "Далее", "favlist");
                 userAouthData.setPassword(usersAnswer.getText());
             } catch (IOException e) {
                 log.error("Авторизация не прошла, пароль "+usersAnswer.getText()+" login "+userAouthData.getLogin());
