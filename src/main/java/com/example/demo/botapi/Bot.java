@@ -208,7 +208,7 @@ public class Bot extends TelegramWebhookBot {
                 userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
                 sendInlineButtons(chatId, "Нажмите чтобы продолжить", "Далее", "next");
             } catch (IOException e) {
-                log.error("Авторизация не прошла");
+                log.error("Авторизация не прошла, пароль "+userAouthData.getPassword()+" login "+userAouthData.getLogin());
                 sendMsg(messageService.getReplyMessage(chatId, "Введите логин и пароль заново"));
                 userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
             }

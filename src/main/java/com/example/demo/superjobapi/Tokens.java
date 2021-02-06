@@ -37,6 +37,7 @@ public class Tokens {
 
         JSONObject object = new JSONObject(result);
         String token = (String) object.get("access_token");
+        log.info("Token: "+token);
 
         return token;
     }
