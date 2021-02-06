@@ -13,7 +13,7 @@ public class UserDataCache {
     private Map<Integer, String> userFavId = new ConcurrentHashMap<>();
     private Map<Integer, String> userToken = new ConcurrentHashMap<>();
 
-    public static Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
+    public Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
 
     public UserAouthData getUserAouth(int userId) {
         UserAouthData userAouthData = userAouth.get(userId);
