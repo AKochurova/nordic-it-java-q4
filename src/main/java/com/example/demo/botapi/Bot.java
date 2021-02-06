@@ -37,8 +37,6 @@ public class Bot extends TelegramWebhookBot {
     private ReplyMessageService messageService;
     @Autowired
     private Buttons buttons;
-    @Autowired
-    private Aouth aouth;
 
 
     @Value("${telegram.username}")
@@ -98,7 +96,6 @@ public class Bot extends TelegramWebhookBot {
     public void handleCallbackQuery(CallbackQuery callbackQuery) {
         int userId = callbackQuery.getFrom().getId();
         Long chatId = callbackQuery.getMessage().getChatId();
-        UserAouthData userAouthData = aouth.getUserAouth(userId);
         //String str = "https://www.superjob.ru/authorize/?client_id=1599&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/" + userId;
         switch (callbackQuery.getData()) {
             /*case "favlist":
@@ -111,7 +108,8 @@ public class Bot extends TelegramWebhookBot {
                 break;*/
             case "next":
                 try {
-                    if (Tokens.getFavs(userAouthData.getLogin(), userAouthData.getPassword(), userDataCache.getUsersFavId(userId)))
+                    if (Tokens.getFavs(userDataCache.getUserAouth(userId).getLogin(),
+                            userDataCache.getUserAouth(userId).getPassword(), userDataCache.getUsersFavId(userId)))
                         answerCallbackQuery(callbackQuery.getId(), "Вакансия добавлена в избранное");
                     else answerCallbackQuery(callbackQuery.getId(), "Произошла ошибка");
                 } catch (IOException e) {
@@ -119,7 +117,7 @@ public class Bot extends TelegramWebhookBot {
                 }
                 break;
             default:
-                if (aouth.getUserAouth(userId)==null){
+                if (userDataCache.getUserAouth(userId)==null){
                     sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ, введите логин\n"));
                     userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
                     userDataCache.setUsersFavId(userId, callbackQuery.getData());
@@ -171,7 +169,7 @@ public class Bot extends TelegramWebhookBot {
         long chatId = inputMsg.getChatId();
 
         UserProfileData profileData = userDataCache.getUserProfileData(userId);
-        UserAouthData userAouthData = aouth.getUserAouth(userId);
+        UserAouthData userAouthData = userDataCache.getUserAouth(userId);
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
 
 

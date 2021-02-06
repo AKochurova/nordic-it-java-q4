@@ -16,13 +16,5 @@ public class Aouth {
     public static String getUsersCodes(String userId) {
         return usersCodes.get(userId);
     }*/
-   public static Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
 
-    public UserAouthData getUserAouth(int userId) {
-        return userAouth.get(userId);
-    }
-
-    public void setUserAouth(int userId, UserAouthData userAouthData) {
-        userAouth.put(userId, userAouthData);
-    }
 }
