@@ -118,9 +118,9 @@ public class Bot extends TelegramWebhookBot {
                 break;
             default:
                 if (userDataCache.getUserAouth(userId).getLogin()==null){
-                    sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ, введите логин\n"));
                     userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
                     userDataCache.setUsersFavId(userId, callbackQuery.getData());
+                    sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ, введите логин\n"));
                     break;
                 }
                // sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ:\n" + str));
