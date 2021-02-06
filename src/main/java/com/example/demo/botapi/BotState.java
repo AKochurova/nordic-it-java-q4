@@ -5,6 +5,8 @@ public enum BotState {
     FIND_JOB,
     FILLING_PROFILE,
     GET_FAVSLIST,
+    GET_LOGIN,
+    GET_PASSWORD,
     PROFILE_FILLED;
 
 }

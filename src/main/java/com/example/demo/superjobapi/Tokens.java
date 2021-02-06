@@ -16,8 +16,19 @@ import java.util.Scanner;
 
 @Slf4j
 public class Tokens {
-    public static String getTokens(int userId) throws IOException {
-        String str = "https://api.superjob.ru/2.0/oauth2/access_token/?code="+Aouth.getUsersCodes(""+userId)+"&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
+    public static String getTokens(/*int userId*/String login, String password) throws IOException {
+        /*String str = "https://api.superjob.ru/2.0/oauth2/access_token/?code="+Aouth.getUsersCodes(""+userId)+"&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
+        URL url = new URL(str);
+
+        Scanner scanner = new Scanner((InputStream) url.getContent());
+        String result = "";
+        result += scanner.nextLine();
+
+        JSONObject object = new JSONObject(result);
+        String token = (String) object.get("access_token");
+
+        return token;*/
+        String str = "https://api.superjob.ru/2.0/oauth2/password/?login="+login+"&password="+password+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
         URL url = new URL(str);
 
         Scanner scanner = new Scanner((InputStream) url.getContent());
@@ -29,11 +40,11 @@ public class Tokens {
 
         return token;
     }
-    public static boolean getFavs(int userId, String idFav) throws IOException{
+    public static boolean getFavs(String login, String password, String idFav) throws IOException{
         URL url2 = new URL("https://api.superjob.ru/2.0/favorites/"+idFav+"/");
         HttpURLConnection con = (HttpURLConnection) url2.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("Authorization", "Bearer "+getTokens(userId));
+        con.setRequestProperty("Authorization", "Bearer "+getTokens(login, password));
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -54,11 +65,11 @@ public class Tokens {
 
         return answer;
     }
-    public static String getFavsList(int userId) throws IOException{
+    public static String getFavsList(/*int userId*/String login, String password) throws IOException{
         URL url3 = new URL("https://api.superjob.ru/2.0/favorites/");
         HttpURLConnection con = (HttpURLConnection) url3.openConnection();
         con.setRequestMethod("GET");
-        con.setRequestProperty("Authorization", "Bearer "+getTokens(userId));
+        con.setRequestProperty("Authorization", "Bearer "+getTokens(login, password));
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
