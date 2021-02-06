@@ -225,6 +225,7 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         userDataCache.saveUserProfileData(userId, profileData);
+        userDataCache.saveUserAouth(userId, userAouthData);
 
     }
 

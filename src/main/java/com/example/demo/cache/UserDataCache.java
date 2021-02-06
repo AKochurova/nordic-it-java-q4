@@ -22,6 +22,10 @@ public class UserDataCache {
         }
         return userAouthData;
     }
+    public void saveUserAouth(int userId, UserAouthData userAouthData) {
+
+        userAouth.put(userId, userAouthData);
+    }
 
     public String getUsersToken(int userId) {
         return userToken.get(userId);
