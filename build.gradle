@@ -25,6 +25,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: '4.4.0.2'
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.2.1.RELEASE'
+
 
 }
 

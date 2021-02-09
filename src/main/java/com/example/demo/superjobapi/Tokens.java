@@ -16,18 +16,8 @@ import java.util.Scanner;
 
 @Slf4j
 public class Tokens {
-    public static String getTokens(/*int userId*/String login, String password) throws IOException {
-        /*String str = "https://api.superjob.ru/2.0/oauth2/access_token/?code="+Aouth.getUsersCodes(""+userId)+"&redirect_uri=https://jobseeker-bot.herokuapp.com/getcode/"+userId+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
-        URL url = new URL(str);
+    public static String getTokens(String login, String password) throws IOException {
 
-        Scanner scanner = new Scanner((InputStream) url.getContent());
-        String result = "";
-        result += scanner.nextLine();
-
-        JSONObject object = new JSONObject(result);
-        String token = (String) object.get("access_token");
-
-        return token;*/
         String str = "https://api.superjob.ru/2.0/oauth2/password/?login="+login+"&password="+password+"&client_id=1599&client_secret=v3.r.133386385.0a3795f1baaab6cb9057bbd1af19f5b2ba967a72.c20cacaa5da55fe4c622288ac5fbbde1ed74759f";
         URL url = new URL(str);
 
@@ -66,7 +56,7 @@ public class Tokens {
 
         return answer;
     }
-    public static String getFavsList(/*int userId*/String login, String password) throws IOException{
+    public static String getFavsList(String login, String password) throws IOException{
         URL url3 = new URL("https://api.superjob.ru/2.0/favorites/");
         HttpURLConnection con = (HttpURLConnection) url3.openConnection();
         con.setRequestMethod("GET");

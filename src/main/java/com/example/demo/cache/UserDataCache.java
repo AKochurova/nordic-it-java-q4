@@ -1,8 +1,7 @@
 package com.example.demo.cache;
-
 import com.example.demo.botapi.BotState;
+import com.example.demo.model.UserProfileDataMongo;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,10 +10,20 @@ public class UserDataCache {
     private Map<Integer, BotState> userBotStates = new ConcurrentHashMap<>();
     private Map<Integer, UserProfileData> usersProfileData = new ConcurrentHashMap<>();
     private Map<Integer, String> userFavId = new ConcurrentHashMap<>();
-    private Map<Integer, String> userToken = new ConcurrentHashMap<>();
-
     private Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
+    private Map<Integer, UserProfileDataMongo> userProfileDataMongo = new ConcurrentHashMap<>();
 
+    public UserProfileDataMongo getUserProfileDataMongo(int userId) {
+        UserProfileDataMongo dataMongo = userProfileDataMongo.get(userId);
+        if (dataMongo == null){
+            dataMongo = new UserProfileDataMongo();
+        }
+        return dataMongo;
+    }
+    public void saveUserProfileDataMongo(int userId, UserProfileDataMongo dataMongo) {
+
+        userProfileDataMongo.put(userId, dataMongo);
+    }
     public UserAouthData getUserAouth(int userId) {
         UserAouthData userAouthData = userAouth.get(userId);
         if (userAouthData == null){
@@ -25,13 +34,6 @@ public class UserDataCache {
     public void saveUserAouth(int userId, UserAouthData userAouthData) {
 
         userAouth.put(userId, userAouthData);
-    }
-
-    public String getUsersToken(int userId) {
-        return userToken.get(userId);
-    }
-    public void setUsersToken(int userId, String token) {
-        userToken.put(userId, token);
     }
 
     public String getUsersFavId(int userId) {
