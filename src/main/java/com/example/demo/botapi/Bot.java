@@ -181,14 +181,14 @@ public class Bot extends TelegramWebhookBot {
         }
 
         if (botState.equals(BotState.GET_FAVSLIST)) {
-            if (userDataCache.getUserAouth(userId).getLogin()==null) {
+            if (/*userDataCache.getUserAouth(userId).getLogin()==null*/profileDataMongo==null) {
                 userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
                 sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ, введите логин\n"));
             }else {
                 userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(userAouthData.getLogin(),
-                            userAouthData.getPassword())));
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(profileDataMongo.getLogin(),
+                            profileDataMongo.getPassword())));
                 } catch (IOException e) {
                     log.error("Не удалось отправить список вакансий");
                 }
@@ -209,10 +209,10 @@ public class Bot extends TelegramWebhookBot {
                 sendInlineButtons(chatId, "Нажмите чтобы просмотреть список избранного", "Далее", "favlist");
                 //userAouthData.setPassword(usersAnswer.getText());
                 profileDataMongo.setPassword(usersAnswer.getText());
-                profileDataMongo.setId(userId+"");
+                profileDataMongo.setUserId(userId);
                 profileDataService.saveUserProfileData(profileDataMongo);
             } catch (IOException e) {
-                log.error("Авторизация не прошла, пароль "+usersAnswer.getText()+" login "+userAouthData.getLogin());
+                log.error("Авторизация не прошла, пароль "+usersAnswer.getText()+" login "+profileDataMongo.getLogin());
                 sendMsg(messageService.getReplyMessage(chatId, "Введите логин и пароль заново"));
                 userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
             }
