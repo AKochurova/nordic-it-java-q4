@@ -100,16 +100,16 @@ public class Bot extends TelegramWebhookBot {
         switch (callbackQuery.getData()) {
             case "favlist":
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(userDataCache.getUserAouth(userId).getLogin(),
-                            userDataCache.getUserAouth(userId).getPassword())));
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(profileDataMongo.getLogin(),
+                            profileDataMongo.getPassword())));
                 } catch (IOException e) {
                     log.error("Не удалось отправить список вакансий");
                 }
                 break;
             case "next":
                 try {
-                    if (Tokens.getFavs(userDataCache.getUserAouth(userId).getLogin(),
-                            userDataCache.getUserAouth(userId).getPassword(), userDataCache.getUsersFavId(userId)))
+                    if (Tokens.getFavs(profileDataMongo.getLogin(),
+                            profileDataMongo.getPassword(), userDataCache.getUsersFavId(userId)))
                         answerCallbackQuery(callbackQuery.getId(), "Вакансия добавлена в избранное");
                     else answerCallbackQuery(callbackQuery.getId(), "Произошла ошибка");
                 } catch (IOException e) {
