@@ -15,7 +15,7 @@ public class UserProfileDataService {
         profileMongoRepository.save(profileDataId);
     }
 
-    public UserProfileDataMongo getUserProfileData(long chatId){
-        return profileMongoRepository.findByChatId(chatId);
+    public UserProfileDataMongo getUserProfileData(long userId){
+        return profileMongoRepository.findByUserId(userId);
     }
 }
