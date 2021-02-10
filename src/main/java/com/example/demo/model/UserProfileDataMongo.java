@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class UserProfileDataMongo implements Serializable {
 
     @Id
-    private String id;
+    private long id;
     private String password;
     private String login;
 
