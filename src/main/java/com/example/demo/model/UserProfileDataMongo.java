@@ -17,7 +17,7 @@ public class UserProfileDataMongo implements Serializable {
     private String id;
     private String password;
     private String login;
-    private long userId;
+
 
 }
 

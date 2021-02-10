@@ -209,7 +209,7 @@ public class Bot extends TelegramWebhookBot {
                 sendInlineButtons(chatId, "Нажмите чтобы просмотреть список избранного", "Далее", "favlist");
                 //userAouthData.setPassword(usersAnswer.getText());
                 profileDataMongo.setPassword(usersAnswer.getText());
-                profileDataMongo.setUserId(userId);
+                profileDataMongo.setId(userId+"");
                 profileDataService.saveUserProfileData(profileDataMongo);
             } catch (IOException e) {
                 log.error("Авторизация не прошла, пароль "+usersAnswer.getText()+" login "+profileDataMongo.getLogin());
