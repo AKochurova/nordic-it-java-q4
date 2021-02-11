@@ -10,7 +10,6 @@ public class UserDataCache {
     private Map<Integer, BotState> userBotStates = new ConcurrentHashMap<>();
     private Map<Integer, UserProfileData> usersProfileData = new ConcurrentHashMap<>();
     private Map<Integer, String> userFavId = new ConcurrentHashMap<>();
-    private Map<Integer, UserAouthData> userAouth = new ConcurrentHashMap<>();
     private Map<Integer, UserProfileDataMongo> userProfileDataMongo = new ConcurrentHashMap<>();
 
     public UserProfileDataMongo getUserProfileDataMongo(int userId) {
@@ -24,21 +23,11 @@ public class UserDataCache {
 
         userProfileDataMongo.put(userId, dataMongo);
     }
-    public UserAouthData getUserAouth(int userId) {
-        UserAouthData userAouthData = userAouth.get(userId);
-        if (userAouthData == null){
-            userAouthData = new UserAouthData();
-        }
-        return userAouthData;
-    }
-    public void saveUserAouth(int userId, UserAouthData userAouthData) {
-
-        userAouth.put(userId, userAouthData);
-    }
 
     public String getUsersFavId(int userId) {
         return userFavId.get(userId);
     }
+
     public void setUsersFavId(int userId, String id) {
         userFavId.put(userId, id);
     }

@@ -26,7 +26,7 @@ public class Jobs {
         JsonNode root = mapper.readTree(getConnection(message, town));
         JsonNode objContent = root.path("objects");
 
-        Model[] mods = mapper.readValue(objContent.toString(), Model[].class);
+        VacancyModel[] mods = mapper.readValue(objContent.toString(), VacancyModel[].class);
 
         String stringBuilder = mods[num].getProfession() + "\n" + mods[num].getFirm_name() + "\n" +
                 mods[num].getLink() + "\n";
@@ -46,7 +46,7 @@ public class Jobs {
         JsonNode root = mapper.readTree(getConnection(message, town));
         JsonNode objContent = root.path("objects");
 
-        Id[] ides = mapper.readValue(objContent.toString(), Id[].class);
+        IdModel[] ides = mapper.readValue(objContent.toString(), IdModel[].class);
 
         String string = ides[num].getId()+"";
 

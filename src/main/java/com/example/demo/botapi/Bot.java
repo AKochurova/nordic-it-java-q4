@@ -1,5 +1,4 @@
 package com.example.demo.botapi;
-import com.example.demo.cache.UserAouthData;
 import com.example.demo.cache.UserDataCache;
 import com.example.demo.cache.UserProfileData;
 import com.example.demo.model.UserProfileDataMongo;
@@ -117,7 +116,7 @@ public class Bot extends TelegramWebhookBot {
                 }
                 break;
             default:
-                if (/*userDataCache.getUserAouth(userId).getLogin()==null*/profileDataMongo==null){
+                if (profileDataMongo==null){
                     userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
                     userDataCache.setUsersFavId(userId, callbackQuery.getData());
                     sendMsg(messageService.getReplyMessage(callbackQuery.getMessage().getChatId(), "Авторизируйтесь на SJ, введите логин\n"));
@@ -166,7 +165,6 @@ public class Bot extends TelegramWebhookBot {
 
         UserProfileData profileData = userDataCache.getUserProfileData(userId);
         UserProfileDataMongo profileDataMongo = userDataCache.getUserProfileDataMongo(userId);
-        UserAouthData userAouthData = userDataCache.getUserAouth(userId);
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
 
 
@@ -181,33 +179,31 @@ public class Bot extends TelegramWebhookBot {
         }
 
         if (botState.equals(BotState.GET_FAVSLIST)) {
-            if (/*userDataCache.getUserAouth(userId).getLogin()==null*/profileDataMongo==null) {
+            if (profileDataMongo==null) {
                 userDataCache.setUsersCurrentBotState(userId, BotState.GET_LOGIN);
                 sendMsg(messageService.getReplyMessage(chatId, "Авторизируйтесь на SJ, введите логин\n"));
             }else {
                 userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
                 try {
-                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(profileDataMongo.getLogin(),
-                            profileDataMongo.getPassword())));
+                    sendMsg(messageService.getReplyMessage(chatId, "Избранные вакансии: \n" + Tokens.getFavsList(profileDataService.getUserProfileData(userId).getLogin(),
+                            profileDataService.getUserProfileData(userId).getPassword())));
                 } catch (IOException e) {
                     log.error("Не удалось отправить список вакансий");
                 }
             }
         }
         if(botState.equals(BotState.GET_LOGIN)){
-            //userAouthData.setLogin(usersAnswer.getText());
             profileDataMongo.setLogin(usersAnswer.getText());
             sendMsg(messageService.getReplyMessage(chatId, "Введите пароль:"));
             userDataCache.setUsersCurrentBotState(userId, BotState.GET_PASSWORD);
         }
         if(botState.equals(BotState.GET_PASSWORD)){
             try {
-                Tokens.getTokens(/*userAouthData.getLogin()*/profileDataMongo.getLogin(), usersAnswer.getText());
+                Tokens.getTokens(profileDataMongo.getLogin(), usersAnswer.getText());
                 sendMsg(messageService.getReplyMessage(chatId, "Вы авторизированы"));
                 userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
                 sendInlineButtons(chatId, "Нажмите чтобы добавить в избранное", "Далее", "next");
                 sendInlineButtons(chatId, "Нажмите чтобы просмотреть список избранного", "Далее", "favlist");
-                //userAouthData.setPassword(usersAnswer.getText());
                 profileDataMongo.setPassword(usersAnswer.getText());
                 profileDataMongo.setId(userId);
                 profileDataService.saveUserProfileData(profileDataMongo);
@@ -229,7 +225,6 @@ public class Bot extends TelegramWebhookBot {
             userDataCache.setUsersCurrentBotState(userId, BotState.FILLING_PROFILE);
         }
         userDataCache.saveUserProfileData(userId, profileData);
-        //userDataCache.saveUserAouth(userId, userAouthData);
         userDataCache.saveUserProfileDataMongo(userId, profileDataMongo);
 
     }

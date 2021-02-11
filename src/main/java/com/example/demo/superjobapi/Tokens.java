@@ -1,7 +1,4 @@
 package com.example.demo.superjobapi;
-
-import com.example.demo.cache.Aouth;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -76,11 +73,11 @@ public class Tokens {
         JsonNode root = mapper.readTree(content.toString());
         JsonNode objContent = root.path("objects");
 
-        FavVacancy[] vacancies = mapper.readValue(objContent.toString(), FavVacancy[].class);
+        FavVacancyModel[] vacancies = mapper.readValue(objContent.toString(), FavVacancyModel[].class);
 
         StringBuilder string = new StringBuilder();
 
-        for (FavVacancy i : vacancies){
+        for (FavVacancyModel i : vacancies){
             string.append(i.getProfession()).append("\n").append(i.getLink()).append("\n");
         }
         return string.toString();

@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 
 import com.example.demo.botapi.Bot;
-import com.example.demo.cache.Aouth;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -12,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RestController
 public class WebHookController {
     private final Bot telegramBot;
-    private Aouth aouth = new Aouth();
 
     public WebHookController(Bot telegramBot){
         this.telegramBot = telegramBot;
